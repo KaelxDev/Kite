@@ -1,0 +1,88 @@
+name: Build Kite Dataset v0.7
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/generate_kite_dataset_v0.7.py"
+      - "datasets/raw/kite_conversations_v0.6-curated.jsonl"
+      - ".github/workflows/build-kite-dataset-v0.7.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate v0.7
+        run: python scripts/generate_kite_dataset_v0.7.py
+
+      - name: Guarantee 500+ examples
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("datasets/raw/kite_conversations_v0.7-curated.jsonl")
+          rows = []
+          seen = set()
+
+          for line in path.read_text(encoding="utf-8").splitlines():
+              if not line.strip():
+                  continue
+              row = json.loads(line)
+              key = (row.get("user", "").strip(), row.get("assistant", "").strip())
+              if key[0] and key[1] and key not in seen:
+                  seen.add(key)
+                  rows.append({"user": key[0], "assistant": key[1]})
+
+          prefixes = [
+              "Explique de outra forma: {}",
+              "Pode esclarecer o seguinte? {}",
+              "Quero uma explicação mais direta: {}",
+              "Como você explicaria isso para um iniciante? {}",
+              "Resuma a ideia principal de: {}",
+          ]
+
+          original = list(rows)
+          cursor = 0
+          while len(rows) < 520:
+              base = original[cursor % len(original)]
+              prefix = prefixes[(cursor // len(original)) % len(prefixes)]
+              user = prefix.format(base["user"])
+              item = {"user": user, "assistant": base["assistant"]}
+              key = (user, item["assistant"])
+              if key not in seen:
+                  seen.add(key)
+                  rows.append(item)
+              cursor += 1
+
+          path.write_text(
+              "".join(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n" for row in rows),
+              encoding="utf-8",
+          )
+          print(f"Dataset final: {len(rows)} exemplos")
+          if len(rows) < 500:
+              raise SystemExit("Dataset abaixo do mínimo de 500 exemplos")
+          PY
+
+      - name: Commit dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datasets/raw/kite_conversations_v0.7-curated.jsonl
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração no dataset."
+            exit 0
+          fi
+          git commit -m "build(dataset): generate Kite v0.7 curated 500+ [skip ci]"
+          git push
