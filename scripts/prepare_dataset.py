@@ -1,35 +1,39 @@
-"""Prepare o dataset Kite v0.7 curado para treinamento.
+"""Prepare os datasets do Kite para treinamento.
 
-Entrada principal:
+Fontes de treinamento:
     datasets/raw/kite_conversations_v0.7-curated.jsonl
+    datasets/raw/kite_conversations_multiturn_v0.1.jsonl
 
-Se o arquivo ainda não existir, o script chama automaticamente o gerador
-v0.7 para criar uma versão com pelo menos 500 exemplos.
-
-Cada linha deve ser um objeto JSON no formato:
+Os dois formatos são aceitos:
     {"user": "...", "assistant": "..."}
+    {"messages": [{"role": "user", "content": "..."}, ...]}
 
-O script preserva quebras de linha, Markdown e blocos de código,
-remove duplicatas exatas e converte tudo para o formato `messages`.
+O script preserva conversas multivoltas, quebras de linha, Markdown e
+blocos de código. Duplicatas exatas são removidas antes da conversão para
+`datasets/processed/train.jsonl`.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
-import runpy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "datasets" / "raw"
 PROCESSED = ROOT / "datasets" / "processed"
-INPUT_FILE = RAW / "kite_conversations_v0.7-curated.jsonl"
-GENERATOR = ROOT / "scripts" / "generate_kite_dataset_v0.7.py"
+
+INPUT_FILES = [
+    RAW / "kite_conversations_v0.7-curated.jsonl",
+    RAW / "kite_conversations_multiturn_v0.1.jsonl",
+]
 OUTPUT_FILE = PROCESSED / "train.jsonl"
+
+ALLOWED_ROLES = {"system", "user", "assistant"}
 
 
 def normalize_text(value: object) -> str:
-    """Normaliza finais de linha e espaços sem destruir a formatação."""
+    """Normaliza finais de linha e espaços sem destruir formatação."""
     if not isinstance(value, str):
         raise ValueError("campo deve ser texto")
 
@@ -44,10 +48,43 @@ def normalize_text(value: object) -> str:
     return "\n".join(lines)
 
 
+def normalize_messages(messages: object) -> dict:
+    """Valida e normaliza uma conversa já no formato messages."""
+    if not isinstance(messages, list) or len(messages) < 2:
+        raise ValueError("'messages' deve conter pelo menos dois turnos")
+
+    normalized = []
+    for message in messages:
+        if not isinstance(message, dict):
+            raise ValueError("cada mensagem deve ser um objeto")
+
+        role = message.get("role")
+        content = normalize_text(message.get("content"))
+
+        if role not in ALLOWED_ROLES:
+            raise ValueError(f"role inválida: {role!r}")
+        if not content:
+            raise ValueError("mensagem com conteúdo vazio")
+
+        normalized.append({"role": role, "content": content})
+
+    if not any(m["role"] == "user" for m in normalized):
+        raise ValueError("conversa sem turno de user")
+    if not any(m["role"] == "assistant" for m in normalized):
+        raise ValueError("conversa sem turno de assistant")
+
+    # Mensagens consecutivas do mesmo papel são permitidas, mas evitamos
+    # estruturas estranhas que indiquem dados malformados.
+    return {"messages": normalized}
+
+
 def normalize_example(data: object) -> dict:
-    """Valida e converte uma conversa raw para o formato messages."""
+    """Converte os formatos raw suportados para `messages`."""
     if not isinstance(data, dict):
         raise ValueError("a linha deve conter um objeto JSON")
+
+    if "messages" in data:
+        return normalize_messages(data["messages"])
 
     user = normalize_text(data.get("user"))
     assistant = normalize_text(data.get("assistant"))
@@ -70,70 +107,71 @@ def fingerprint(example: dict) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def ensure_v07_dataset() -> None:
-    """Gera o v0.7 automaticamente quando ele ainda não existir."""
-    if INPUT_FILE.exists():
+def main() -> None:
+    print("🪁 Kite — Preparação do dataset de treinamento\n")
+
+    existing_files = [path for path in INPUT_FILES if path.exists()]
+    if not existing_files:
+        print("✗ Nenhum dataset de entrada encontrado.")
+        print()
+        for path in INPUT_FILES:
+            print(f"  {path.relative_to(ROOT)}")
+        print()
+        print("O dataset multivoltas recomendado é:")
+        print("  datasets/raw/kite_conversations_multiturn_v0.1.jsonl")
         return
 
-    if not GENERATOR.exists():
-        raise FileNotFoundError(
-            "Dataset v0.7 e gerador não encontrados. "
-            f"Esperado: {GENERATOR}"
-        )
-
-    print("⚠ Dataset v0.7 ainda não existe. Gerando automaticamente...\n")
-    runpy.run_path(str(GENERATOR), run_name="__main__")
-
-    if not INPUT_FILE.exists():
-        raise RuntimeError("O gerador terminou, mas o arquivo v0.7 não foi criado.")
-
-
-def main() -> None:
-    print("🪁 Kite — Preparação do dataset v0.7 curado\n")
-
-    ensure_v07_dataset()
     PROCESSED.mkdir(parents=True, exist_ok=True)
 
-    valid = []
+    valid: list[dict] = []
     invalid = 0
     duplicates = 0
     seen = set()
+    source_counts = {}
 
-    with INPUT_FILE.open("r", encoding="utf-8") as source:
-        for line_number, raw_line in enumerate(source, start=1):
-            if not raw_line.strip():
-                continue
+    for input_file in existing_files:
+        source_valid = 0
+        with input_file.open("r", encoding="utf-8") as source:
+            for line_number, raw_line in enumerate(source, start=1):
+                if not raw_line.strip():
+                    continue
 
-            try:
-                example = normalize_example(json.loads(raw_line))
-            except (json.JSONDecodeError, ValueError) as exc:
-                invalid += 1
-                print(f"⚠ Linha {line_number} ignorada: {exc}")
-                continue
+                try:
+                    example = normalize_example(json.loads(raw_line))
+                except (json.JSONDecodeError, ValueError) as exc:
+                    invalid += 1
+                    print(f"⚠ {input_file.name}:{line_number} ignorada: {exc}")
+                    continue
 
-            key = fingerprint(example)
-            if key in seen:
-                duplicates += 1
-                continue
+                key = fingerprint(example)
+                if key in seen:
+                    duplicates += 1
+                    continue
 
-            seen.add(key)
-            valid.append(example)
+                seen.add(key)
+                valid.append(example)
+                source_valid += 1
 
-    if len(valid) < 500:
-        raise RuntimeError(
-            f"Dataset preparado com apenas {len(valid)} exemplos válidos; "
-            "o mínimo esperado é 500."
-        )
+        source_counts[input_file.name] = source_valid
+
+    if not valid:
+        raise ValueError("Nenhum exemplo válido foi encontrado.")
 
     with OUTPUT_FILE.open("w", encoding="utf-8", newline="\n") as target:
         for example in valid:
             target.write(json.dumps(example, ensure_ascii=False) + "\n")
 
-    print(f"✓ Arquivo lido: {INPUT_FILE.relative_to(ROOT)}")
-    print(f"✓ Exemplos válidos: {len(valid)}")
+    print("Arquivos usados:")
+    for name, count in source_counts.items():
+        print(f"  ✓ {name}: {count} exemplos")
+
+    print(f"\n✓ Exemplos totais válidos: {len(valid)}")
     print(f"✓ Duplicatas removidas: {duplicates}")
     print(f"⚠ Linhas inválidas: {invalid}")
     print(f"✓ Dataset processado: {OUTPUT_FILE.relative_to(ROOT)}")
+
+    multiturn = sum(1 for item in valid if len(item["messages"]) > 2)
+    print(f"✓ Conversas multivoltas: {multiturn}")
 
 
 if __name__ == "__main__":
