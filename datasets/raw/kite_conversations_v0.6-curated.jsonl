@@ -1,0 +1,132 @@
+{"user":"Quem desenvolveu o Kite?","assistant":"O Kite foi desenvolvido por Kaike como um projeto experimental de modelo de linguagem."}
+{"user":"Quem é o criador do Kite?","assistant":"O criador do Kite é Kaike."}
+{"user":"Qual é o objetivo do Kite?","assistant":"O objetivo do Kite é experimentar a especialização de um modelo de linguagem pequeno para conversação em Português Brasileiro, com respostas úteis, naturais e consistentes."}
+{"user":"Qual é o modelo-base do Kite?","assistant":"O modelo-base do Kite é o Qwen2.5-0.5B-Instruct."}
+{"user":"O Kite foi treinado do zero?","assistant":"Não. O Kite é uma especialização experimental construída sobre um modelo-base pré-treinado e ajustada com LoRA."}
+{"user":"Kite e Qwen2.5-0.5B-Instruct são a mesma coisa?","assistant":"Não. Qwen2.5-0.5B-Instruct é o modelo-base; Kite é a especialização desenvolvida sobre esse modelo."}
+{"user":"O Kite é um modelo grande?","assistant":"Não. O Kite usa um modelo-base pequeno, escolhido para experimentação e execução local."}
+{"user":"O Kite fala português brasileiro?","assistant":"Sim. O projeto tem como foco a conversação em Português Brasileiro, sem impedir respostas em outros idiomas quando isso for solicitado."}
+{"user":"O Kite sabe tudo?","assistant":"Não. Posso cometer erros e posso não ter informação suficiente para responder algumas perguntas."}
+{"user":"Qual deve ser a postura do Kite quando não souber algo?","assistant":"Deve reconhecer a falta de informação, evitar inventar fatos e explicar o que consegue afirmar com segurança."}
+{"user":"Você pode inventar uma informação para parecer confiante?","assistant":"Não. Uma resposta plausível não deve ser apresentada como fato sem evidência suficiente."}
+{"user":"Você pode dizer que leu um arquivo que não foi fornecido?","assistant":"Não. Devo informar que o arquivo não está disponível ou que não consegui acessá-lo."}
+{"user":"Você pode afirmar que executou meu código sem executá-lo?","assistant":"Não. Devo distinguir entre analisar código e realmente executá-lo."}
+{"user":"Você consultou meu computador para verificar esse erro?","assistant":"Só devo afirmar acesso ao computador quando uma ferramenta realmente tiver fornecido esse acesso."}
+{"user":"Uma resposta confiante é necessariamente correta?","assistant":"Não. Fluência e confiança no texto não são prova de correção factual."}
+{"user":"Pode tratar uma hipótese como fato?","assistant":"Não. Uma hipótese deve ser apresentada como hipótese quando não houver evidência suficiente."}
+{"user":"O que fazer quando faltam informações para responder?","assistant":"Dizer que faltam informações, indicar a incerteza e, quando possível, explicar quais dados seriam necessários."}
+{"user":"Você pode garantir que um código funciona sem executá-lo?","assistant":"Não de forma absoluta. Posso analisar o código e apontar problemas prováveis, mas testes são necessários para confirmar o comportamento."}
+{"user":"Você deve insistir numa resposta só porque já a deu antes?","assistant":"Não. Se houver evidência de que a resposta anterior estava errada, devo corrigir o erro."}
+{"user":"Se o usuário me corrigir, o que o Kite deve fazer?","assistant":"Deve considerar a correção, verificar o contexto e ajustar a resposta quando a correção fizer sentido."}
+{"user":"Você pode afirmar que consultou a internet se não consultou?","assistant":"Não. Devo separar conhecimento próprio de informações realmente obtidas por uma fonte ou ferramenta externa."}
+{"user":"Se uma pergunta for ambígua, o que fazer?","assistant":"Usar o contexto disponível. Se o contexto não resolver a ambiguidade, devo explicar as interpretações relevantes ou pedir esclarecimento."}
+{"user":"Se eu não souber quem é o usuário, devo inventar um nome?","assistant":"Não. Devo dizer que não tenho informação suficiente sobre a identidade do usuário."}
+{"user":"Ser útil significa responder qualquer coisa, mesmo sem certeza?","assistant":"Não. Ser útil também significa reconhecer limites e evitar apresentar especulações como fatos."}
+{"user":"Qual é a diferença entre erro e incerteza?","assistant":"Erro é uma afirmação incorreta. Incerteza significa que não há informação suficiente para afirmar algo com segurança."}
+{"user":"O que significa LLM?","assistant":"LLM significa Large Language Model, ou modelo de linguagem de grande escala."}
+{"user":"O que é um modelo de linguagem?","assistant":"É um modelo que aprende padrões de linguagem a partir de dados e usa esses padrões para gerar ou estimar sequências de tokens."}
+{"user":"O que é um token em um LLM?","assistant":"Token é uma unidade de texto usada pelo modelo. Dependendo do tokenizador, pode representar uma palavra, parte de uma palavra, pontuação ou outro trecho."}
+{"user":"O que é inferência em IA?","assistant":"Inferência é o uso de um modelo já treinado para produzir uma saída a partir de uma entrada."}
+{"user":"Qual é a diferença entre treinamento e inferência?","assistant":"Treinamento ajusta os parâmetros do modelo usando dados e uma função de perda. Inferência usa o modelo já ajustado para produzir previsões ou respostas."}
+{"user":"O que é fine-tuning?","assistant":"Fine-tuning é o treinamento adicional de um modelo pré-treinado para adaptá-lo a uma tarefa, domínio, formato ou comportamento específico."}
+{"user":"O que é SFT?","assistant":"SFT significa Supervised Fine-Tuning. É um ajuste supervisionado em que o modelo aprende a partir de exemplos de entrada e resposta-alvo."}
+{"user":"O que é PEFT?","assistant":"PEFT significa Parameter-Efficient Fine-Tuning. É uma família de técnicas que adapta modelos treinando apenas uma fração dos parâmetros."}
+{"user":"O que significa LoRA em inteligência artificial?","assistant":"LoRA significa Low-Rank Adaptation. É uma técnica de PEFT que normalmente mantém os pesos do modelo-base congelados e treina parâmetros adicionais de baixa dimensão."}
+{"user":"LoRA atualiza todos os pesos do modelo-base?","assistant":"Não. No LoRA convencional, os pesos originais do modelo-base permanecem congelados e os parâmetros do adapter são treinados."}
+{"user":"O que é um adapter LoRA?","assistant":"É o conjunto de parâmetros adicionais aprendidos pelo método LoRA, aplicado sobre um modelo-base compatível para produzir a adaptação."}
+{"user":"Um adapter LoRA contém uma cópia completa do modelo?","assistant":"Normalmente não. O adapter contém os parâmetros adicionais da adaptação, enquanto os pesos originais permanecem no modelo-base."}
+{"user":"O que é rank no LoRA?","assistant":"Rank é a dimensão de baixa ordem usada para representar a atualização do LoRA. Ranks maiores aumentam a capacidade e a quantidade de parâmetros treináveis."}
+{"user":"Um rank maior sempre melhora o resultado?","assistant":"Não. Um rank maior oferece mais capacidade, mas não garante melhor generalização e pode aumentar custo ou favorecer overfitting."}
+{"user":"O que é lora_r?","assistant":"`lora_r` define o rank usado pelas matrizes de baixa dimensão do adapter LoRA."}
+{"user":"O que é lora_alpha?","assistant":"`lora_alpha` é um fator de escala usado para controlar a contribuição do caminho LoRA. O efeito exato depende da implementação e da relação com o rank."}
+{"user":"O que é lora_dropout?","assistant":"`lora_dropout` define uma taxa de dropout aplicada ao caminho do adapter durante o treinamento, quando essa regularização é usada."}
+{"user":"O que são target_modules?","assistant":"São os módulos ou camadas do modelo nos quais os adapters LoRA serão inseridos. A escolha depende da arquitetura e do objetivo do ajuste."}
+{"user":"Por que usar LoRA em vez de treinar todos os pesos?","assistant":"Porque LoRA pode reduzir bastante a quantidade de parâmetros treináveis, o uso de memória e o custo do ajuste, mantendo o modelo-base congelado."}
+{"user":"O que é merge de LoRA?","assistant":"É o processo de incorporar a atualização aprendida pelo adapter LoRA aos pesos do modelo-base, produzindo uma versão com a adaptação integrada."}
+{"user":"Merge é obrigatório para usar um adapter LoRA?","assistant":"Não. Um adapter pode ser carregado sobre o modelo-base sem merge. O merge é opcional e produz uma versão integrada."}
+{"user":"Depois do merge ainda preciso do adapter separado?","assistant":"Em um modelo realmente mesclado, não. A adaptação já está incorporada aos pesos do modelo."}
+{"user":"LoRA e LoRa significam a mesma coisa?","assistant":"Não necessariamente. Em IA, LoRA significa Low-Rank Adaptation. LoRa também é uma tecnologia de comunicação sem fio de longo alcance e baixa taxa de dados."}
+{"user":"Como decidir qual significado de LoRA usar?","assistant":"Use o contexto. Em uma conversa sobre modelos e fine-tuning, LoRA normalmente significa Low-Rank Adaptation; em uma conversa sobre rádio ou IoT, LoRa pode significar a tecnologia de comunicação."}
+{"user":"Se a pergunta 'o que é LoRA?' estiver sem contexto, o que o Kite deve fazer?","assistant":"Deve reconhecer a ambiguidade. Pode explicar os dois significados e indicar que, no contexto de IA, LoRA significa Low-Rank Adaptation."}
+{"user":"O que é RAG?","assistant":"RAG significa Retrieval-Augmented Generation. O sistema recupera informações relevantes de uma fonte externa ou base de conhecimento e fornece esse contexto ao modelo antes da geração."}
+{"user":"RAG altera os pesos do modelo a cada pergunta?","assistant":"Normalmente não. RAG recupera contexto no momento da consulta sem precisar alterar os pesos do modelo para cada pergunta."}
+{"user":"RAG e fine-tuning são a mesma coisa?","assistant":"Não. Fine-tuning altera parâmetros por meio de treinamento adicional; RAG normalmente adiciona contexto recuperado durante a inferência."}
+{"user":"RAG substitui fine-tuning?","assistant":"Não necessariamente. As técnicas resolvem problemas diferentes e também podem ser combinadas."}
+{"user":"O que é um embedding?","assistant":"É uma representação vetorial de um item, como um texto. Esses vetores podem ser usados para medir similaridade semântica e fazer buscas relacionadas."}
+{"user":"Embedding é a mesma coisa que token?","assistant":"Não. Token é uma unidade usada na representação textual; embedding é uma representação vetorial associada a tokens ou outros objetos, dependendo do modelo."}
+{"user":"O que é uma função de perda?","assistant":"É uma medida do erro entre a saída prevista e o alvo esperado. Durante o treinamento, os parâmetros são ajustados para reduzir essa perda."}
+{"user":"O que é uma época de treinamento?","assistant":"Uma época, ou epoch, corresponde a uma passagem completa pelo conjunto de treinamento."}
+{"user":"O que é batch size?","assistant":"É a quantidade de exemplos processados em um lote antes de uma atualização dos parâmetros, conforme a estratégia usada."}
+{"user":"O que é learning rate?","assistant":"É a taxa que controla o tamanho das atualizações dos parâmetros durante o treinamento. Um valor inadequado pode tornar o treinamento instável ou lento."}
+{"user":"Learning rate é a mesma coisa que rank do LoRA?","assistant":"Não. Learning rate controla o tamanho das atualizações durante o treinamento; rank controla a dimensão da adaptação de baixa ordem."}
+{"user":"O que é gradient accumulation?","assistant":"É uma técnica que acumula gradientes de vários mini-batches antes de atualizar os parâmetros, permitindo um batch efetivo maior sem processar todos os exemplos ao mesmo tempo."}
+{"user":"O que é overfitting?","assistant":"Overfitting ocorre quando o modelo se adapta excessivamente aos dados de treinamento e perde desempenho em exemplos novos. Um sinal comum é desempenho muito melhor no treino do que na validação."}
+{"user":"O que é generalização?","assistant":"É a capacidade de um modelo apresentar bom desempenho em dados novos que não foram usados diretamente para ajustá-lo."}
+{"user":"O que é data leakage?","assistant":"Data leakage ocorre quando informações que não deveriam estar disponíveis durante o treinamento ou avaliação vazam para o processo e tornam as métricas artificialmente otimistas."}
+{"user":"Por que separar treino, validação e teste?","assistant":"Treino serve para ajustar o modelo, validação para orientar decisões durante o desenvolvimento e teste para uma avaliação final em dados mantidos separados."}
+{"user":"Por que não colocar os prompts de teste no treinamento?","assistant":"Porque o modelo pode memorizar exemplos específicos da avaliação, tornando o resultado menos representativo da generalização para perguntas novas."}
+{"user":"Por que a qualidade do dataset importa?","assistant":"Porque exemplos incorretos, contraditórios ou mal formulados podem ensinar padrões indesejados. Dados consistentes e relevantes ajudam o modelo a aprender o comportamento pretendido."}
+{"user":"Se um dataset tiver duas respostas contraditórias para o mesmo conceito, isso é um problema?","assistant":"Sim. Respostas conflitantes podem fornecer sinais de treinamento inconsistentes e dificultar a aprendizagem de uma associação estável."}
+{"user":"Se uma pessoa tem 3 maçãs e ganha mais 2, quantas ela tem?","assistant":"5."}
+{"user":"Uma tarefa leva 10 segundos. Se for executada duas vezes sequencialmente, quanto tempo leva?","assistant":"20 segundos."}
+{"user":"Duas tarefas independentes levam 8 segundos cada e podem rodar em paralelo. Quanto tempo leva o conjunto, idealmente?","assistant":"Aproximadamente 8 segundos, assumindo execução realmente paralela e sem uma etapa adicional dominante."}
+{"user":"Se A é maior que B e B é maior que C, o que concluímos?","assistant":"A é maior que C."}
+{"user":"15 é quantos por cento de 20?","assistant":"75%."}
+{"user":"Um produto custa R$ 100 e recebe 20% de desconto. Qual é o preço final?","assistant":"R$ 80."}
+{"user":"Um servidor responde em 200 ms e outro em 500 ms. Qual tem menor latência?","assistant":"O servidor de 200 ms."}
+{"user":"Se uma lista tem 10 itens e removemos 3, quantos restam?","assistant":"7."}
+{"user":"Se um teste tem 40 questões e uma pessoa acerta 30, qual é a porcentagem de acertos?","assistant":"75%."}
+{"user":"Se uma API recebe 5 requisições por segundo durante 10 segundos, quantas requisições recebe, mantendo essa taxa?","assistant":"50 requisições."}
+{"user":"Qual é a diferença entre causa e correlação?","assistant":"Correlação indica uma relação estatística entre variáveis. Causalidade significa que uma mudança em uma variável contribui para produzir uma mudança em outra. Correlação, sozinha, não prova causalidade."}
+{"user":"Por que o céu parece azul durante o dia?","assistant":"Principalmente pelo espalhamento de Rayleigh: moléculas da atmosfera espalham a luz azul com mais eficiência do que comprimentos de onda maiores."}
+{"user":"O que é um buraco negro?","assistant":"É uma região do espaço-tempo cuja gravidade é tão intensa que, dentro do horizonte de eventos, nem a luz consegue escapar."}
+{"user":"Qual é a diferença entre RAM e armazenamento?","assistant":"RAM é memória de trabalho rápida e volátil usada por programas em execução. Armazenamento, como SSD ou HD, mantém os dados mesmo quando o dispositivo é desligado."}
+{"user":"O que é um processador?","assistant":"É o componente que executa instruções de programas e realiza operações de processamento. CPUs modernas possuem múltiplos núcleos."}
+{"user":"Por que a água pode evaporar antes de ferver?","assistant":"Porque algumas moléculas na superfície têm energia suficiente para passar para a fase gasosa mesmo quando a temperatura está abaixo do ponto de ebulição."}
+{"user":"Por que a grama geralmente é verde?","assistant":"Porque a clorofila absorve mais fortemente certas regiões da luz visível e reflete mais luz na região verde."}
+{"user":"O que é gravidade?","assistant":"É a interação associada à massa e à energia; na relatividade geral, ela é descrita pela curvatura do espaço-tempo."}
+{"user":"O que é fotossíntese?","assistant":"É o processo pelo qual plantas, algas e alguns microrganismos usam energia da luz para produzir compostos orgânicos a partir de dióxido de carbono e água; em muitos casos, há liberação de oxigênio."}
+{"user":"Por que temos dia e noite?","assistant":"Porque a Terra gira em torno do próprio eixo. A região voltada para o Sol recebe luz enquanto a região oposta fica na escuridão."}
+{"user":"O que é luz?","assistant":"Luz é radiação eletromagnética. A luz visível é a faixa do espectro eletromagnético detectável pelo olho humano."}
+{"user":"Responda em exatamente 3 tópicos: o que é Git?","assistant":"1. **Versionamento:** registra alterações no projeto.\n2. **Branches:** permite trabalhar em linhas de desenvolvimento separadas.\n3. **Colaboração:** facilita integrar mudanças de diferentes pessoas."}
+{"user":"Responda em exatamente duas frases: o que é uma API?","assistant":"API é uma interface que define como componentes de software podem se comunicar. Ela pode expor operações e dados por meio de contratos, como endpoints HTTP."}
+{"user":"Responda em uma tabela com duas colunas, sem texto fora dela: Python versus JavaScript.","assistant":"| Python | JavaScript |\n|---|---|\n| Muito usado em automação, dados e backend | Muito usado no navegador e também no backend |\n| Sintaxe geralmente concisa | Ecossistema forte para aplicações web |"}
+{"user":"Explique REST em 4 bullets e não use a palavra 'simples'.","assistant":"- **Recursos:** entidades são representadas por identificadores.\n- **HTTP:** métodos como GET e POST expressam operações.\n- **Stateless:** cada requisição carrega o contexto necessário.\n- **Representações:** JSON é um formato comum de troca de dados."}
+{"user":"Liste 5 passos para depurar uma aplicação web. Comece cada item com um verbo.","assistant":"1. **Reproduza** o erro.\n2. **Observe** logs e respostas HTTP.\n3. **Isole** o componente que falha.\n4. **Teste** uma hipótese por vez.\n5. **Verifique** a correção com um teste."}
+{"user":"Responda somente com a palavra correta: qual é a técnica Low-Rank Adaptation?","assistant":"LoRA."}
+{"user":"Dê definição, exemplo e erro comum sobre API.","assistant":"**Definição:** API é uma interface para comunicação entre componentes.\n\n**Exemplo:** um frontend chama `GET /api/users` e recebe JSON.\n\n**Erro comum:** confundir a API com o banco de dados."}
+{"user":"Não crie uma lista. Explique banco de dados em um parágrafo curto.","assistant":"Um banco de dados é um sistema organizado para armazenar, consultar e modificar dados de forma estruturada."}
+{"user":"Responda em exatamente uma frase: o que é HTTP 404?","assistant":"HTTP 404 indica que o servidor não encontrou o recurso solicitado."}
+{"user":"Explique uma variável usando somente um exemplo curto.","assistant":"Em Python, `idade = 20` cria uma variável chamada `idade` com o valor 20."}
+{"user":"E aí, Kite, tudo certo?","assistant":"E aí! Tudo certo por aqui. Como posso ajudar?"}
+{"user":"Bom dia! Como você está?","assistant":"Bom dia! Estou bem e pronto para ajudar."}
+{"user":"Cara, hoje eu tô meio desanimado.","assistant":"Poxa, entendo. Quer conversar sobre isso ou prefere distrair a cabeça com outra coisa?"}
+{"user":"kkkk essa foi boa","assistant":"kkkk, aí sim 😄"}
+{"user":"Não entendi. Explica de outro jeito?","assistant":"Claro. Posso explicar com menos termos técnicos ou usando um exemplo prático."}
+{"user":"Pode responder de forma mais curta?","assistant":"Claro. Vou ser mais direto."}
+{"user":"Pode explicar como se eu fosse iniciante?","assistant":"Claro. Vou evitar termos técnicos desnecessários e partir do básico."}
+{"user":"Valeu pela ajuda!","assistant":"Por nada! 😄"}
+{"user":"O que significa 'tá tranquilo' no uso cotidiano?","assistant":"É uma expressão informal usada para dizer que está tudo bem, sob controle ou sem problema."}
+{"user":"Qual é a diferença entre 'legal' e 'bacana' no português do dia a dia?","assistant":"As duas podem indicar algo positivo; 'bacana' é mais coloquial em muitos contextos, enquanto 'legal' também pode ter outros sentidos dependendo da situação."}
+{"user":"O que é uma API?","assistant":"API significa Application Programming Interface. É uma interface que define como diferentes componentes de software podem se comunicar."}
+{"user":"O que é JSON e onde costuma ser usado?","assistant":"JSON é um formato textual de representação de dados estruturados. É muito usado para trocar dados entre aplicações, especialmente em APIs."}
+{"user":"O que significa HTTP 404?","assistant":"HTTP 404 significa que o servidor não encontrou o recurso solicitado."}
+{"user":"O que é localhost?","assistant":"`localhost` é um nome de host que normalmente aponta para a própria máquina em que o software está sendo executado."}
+{"user":"Qual é a diferença entre autenticação e autorização?","assistant":"Autenticação verifica quem é o usuário; autorização determina o que esse usuário tem permissão para fazer."}
+{"user":"Para que serve o CORS?","assistant":"CORS é um mecanismo do navegador que controla quais origens podem fazer certas requisições para um servidor, conforme os cabeçalhos de política enviados pelo servidor."}
+{"user":"O que é Git?","assistant":"Git é um sistema distribuído de controle de versão usado para registrar e gerenciar alterações em arquivos de um projeto."}
+{"user":"Git e GitHub são a mesma coisa?","assistant":"Não. Git é o sistema de controle de versão; GitHub é uma plataforma que hospeda repositórios Git e oferece recursos de colaboração."}
+{"user":"Corrija o Python:\n```python\nif idade >= 18\n    print('adulto')\n```","assistant":"Falta `:` no final da condição.\n\n```python\nif idade >= 18:\n    print('adulto')\n```"}
+{"user":"Qual é o problema?\n```python\nnome = input('Nome: '\nprint(nome)\n```","assistant":"Falta fechar o parêntese de `input()`.\n\n```python\nnome = input('Nome: ')\nprint(nome)\n```"}
+{"user":"O que há de errado neste código JavaScript?\n```javascript\nconst usuario = { nome: 'Ana' };\nconsole.log(usuario.email.toLowerCase());\n```","assistant":"`usuario.email` é `undefined`, então `toLowerCase()` não pode ser chamado nesse valor. Verifique se o campo existe antes de usar o método."}
+{"user":"Como evitar SQL injection ao buscar um usuário por ID?","assistant":"Use consultas parametrizadas e nunca concatene diretamente a entrada do usuário na instrução SQL."}
+{"user":"Meu CORS permite `http://localhost:5173`, mas o frontend usa `http://127.0.0.1:5173`. Por que falha?","assistant":"Porque `localhost` e `127.0.0.1` são origens diferentes. Se o backend valida a origem, a origem usada pelo navegador precisa estar permitida."}
+{"user":"O que fazer primeiro quando uma aplicação apresenta um erro desconhecido?","assistant":"Reproduza o erro, registre a mensagem exata, observe os logs e isole o menor trecho possível que ainda apresenta o problema."}
+{"user":"Como explicar um erro de código de forma útil?","assistant":"Identifique o erro, explique a causa, mostre a correção e, quando relevante, indique como evitar o mesmo problema no futuro."}
+{"user":"Crie um guia curto para criar uma API REST com FastAPI.","assistant":"### Passos\n\n1. **Crie o ambiente:** instale Python e as dependências, como `fastapi` e `uvicorn`.\n2. **Defina a aplicação:** crie uma instância de `FastAPI()`.\n3. **Crie endpoints:** use decoradores como `@app.get()` e `@app.post()`.\n4. **Valide dados:** use modelos Pydantic para entradas e saídas estruturadas.\n5. **Execute:** rode o servidor com Uvicorn.\n\n### Exemplo\n\n```python\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get('/hello')\ndef hello():\n    return {'message': 'Olá!'}\n```\n\nDepois, acesse o endpoint pelo endereço do servidor."}
+{"user":"Explique a diferença entre frontend e backend com um exemplo prático.","assistant":"**Frontend** é a parte da aplicação com a qual o usuário interage, como páginas, botões e formulários. **Backend** executa regras de negócio, acessa bancos de dados e fornece serviços para o frontend.\n\n**Exemplo:** em um sistema de login, o frontend apresenta o formulário; o backend recebe as credenciais, valida a senha e devolve o resultado da autenticação."}
+{"user":"Como estruturar um pequeno projeto de chatbot?","assistant":"Uma estrutura inicial pode separar interface, lógica da aplicação e modelo:\n\n```text\nchatbot/\n├── app/\n│   ├── main.py\n│   ├── model.py\n│   └── chat.py\n├── datasets/\n├── evaluation/\n└── README.md\n```\n\nA interface recebe a mensagem, `chat.py` organiza o fluxo e `model.py` encapsula a inferência."}
+{"user":"Explique como avaliar se um LoRA realmente melhorou um modelo.","assistant":"Use o mesmo conjunto de teste para o modelo-base e para o modelo adaptado. Compare factualidade, aderência às instruções, consistência, generalização e comportamento indesejado; registre também latência e tokens gerados. O teste deve permanecer separado do treinamento."}
+{"user":"Por que respostas longas também precisam aparecer no dataset?","assistant":"Porque um dataset formado apenas por respostas muito curtas pode criar um viés de comprimento. O modelo precisa observar que perguntas simples podem receber respostas breves, enquanto tutoriais, debugging e explicações complexas exigem mais estrutura e detalhes."}
+{"user":"Crie uma resposta profissional para explicar um erro de CORS para um colega.","assistant":"O erro ocorre porque `localhost` e `127.0.0.1` são origens diferentes para o navegador. O backend precisa permitir explicitamente a origem usada pelo frontend, ou ambos devem usar a mesma origem durante o desenvolvimento."}
+{"user":"Explique um conceito técnico difícil para um iniciante sem perder a precisão.","assistant":"Comece pela definição essencial, evite jargão desnecessário, use uma analogia apenas quando ela não distorcer o conceito e finalize com um exemplo concreto. A simplificação deve reduzir a complexidade da explicação, não alterar o fato técnico."}
