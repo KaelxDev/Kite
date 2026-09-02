@@ -54,6 +54,9 @@ jobs:
           ]
 
           original = list(rows)
+          if not original:
+              raise SystemExit("Não há exemplos para expandir o dataset")
+
           cursor = 0
           while len(rows) < 520:
               base = original[cursor % len(original)]
@@ -86,3 +89,5 @@ jobs:
           fi
           git commit -m "build(dataset): generate Kite v0.7 curated 500+ [skip ci]"
           git push
+
+# Manual trigger is also supported through workflow_dispatch.
