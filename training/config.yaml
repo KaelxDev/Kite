@@ -1,0 +1,18 @@
+model_name_or_path: ./base_model/Qwen2.5-0.5B-Instruct
+dataset_path: ./datasets/processed/train.jsonl
+output_dir: ./outputs/kite-lora
+
+# Initial conservative configuration for the first LoRA experiment
+num_train_epochs: 1
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 0.0002
+logging_steps: 1
+save_steps: 50
+max_seq_length: 1024
+
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+
+seed: 42
