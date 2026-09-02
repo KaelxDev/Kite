@@ -3,6 +3,9 @@
 Entrada principal:
     datasets/raw/kite_conversations_v0.7-curated.jsonl
 
+Se o arquivo ainda não existir, o script chama automaticamente o gerador
+v0.7 para criar uma versão com pelo menos 500 exemplos.
+
 Cada linha deve ser um objeto JSON no formato:
     {"user": "...", "assistant": "..."}
 
@@ -14,12 +17,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import runpy
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "datasets" / "raw"
 PROCESSED = ROOT / "datasets" / "processed"
 INPUT_FILE = RAW / "kite_conversations_v0.7-curated.jsonl"
+GENERATOR = ROOT / "scripts" / "generate_kite_dataset_v0.7.py"
 OUTPUT_FILE = PROCESSED / "train.jsonl"
 
 
@@ -65,19 +70,28 @@ def fingerprint(example: dict) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def ensure_v07_dataset() -> None:
+    """Gera o v0.7 automaticamente quando ele ainda não existir."""
+    if INPUT_FILE.exists():
+        return
+
+    if not GENERATOR.exists():
+        raise FileNotFoundError(
+            "Dataset v0.7 e gerador não encontrados. "
+            f"Esperado: {GENERATOR}"
+        )
+
+    print("⚠ Dataset v0.7 ainda não existe. Gerando automaticamente...\n")
+    runpy.run_path(str(GENERATOR), run_name="__main__")
+
+    if not INPUT_FILE.exists():
+        raise RuntimeError("O gerador terminou, mas o arquivo v0.7 não foi criado.")
+
+
 def main() -> None:
     print("🪁 Kite — Preparação do dataset v0.7 curado\n")
 
-    if not INPUT_FILE.exists():
-        print("✗ Dataset de entrada não encontrado.")
-        print()
-        print("Adicione ou gere o arquivo:")
-        print("  datasets/raw/kite_conversations_v0.7-curated.jsonl")
-        print()
-        print("Para gerar a versão 500+:")
-        print("  python scripts/generate_kite_dataset_v0.7.py")
-        return
-
+    ensure_v07_dataset()
     PROCESSED.mkdir(parents=True, exist_ok=True)
 
     valid = []
@@ -104,6 +118,12 @@ def main() -> None:
 
             seen.add(key)
             valid.append(example)
+
+    if len(valid) < 500:
+        raise RuntimeError(
+            f"Dataset preparado com apenas {len(valid)} exemplos válidos; "
+            "o mínimo esperado é 500."
+        )
 
     with OUTPUT_FILE.open("w", encoding="utf-8", newline="\n") as target:
         for example in valid:
