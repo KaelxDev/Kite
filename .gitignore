@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Model weights / local model files
+base_model/*
+model/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.gguf
+
+# Training outputs
+outputs/*
+!outputs/.gitkeep
+
+# Local datasets
+# Keep dataset documentation, but do not commit raw/processed training data by default.
+datasets/raw/*
+datasets/processed/*
+!datasets/raw/README.md
+!datasets/processed/README.md
+
+# Logs / caches
+*.log
+.cache/
