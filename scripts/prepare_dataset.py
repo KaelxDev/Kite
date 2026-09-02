@@ -1,13 +1,15 @@
 """Prepare o dataset bruto para o treinamento do Kite.
 
-Entrada esperada:
-    datasets/raw/kite_conversations_v0.1.jsonl
+Entrada:
+    datasets/raw/kite_conversations_v0.3.jsonl
 
 Cada linha deve ser um objeto JSON no formato:
     {"user": "...", "assistant": "..."}
 
-O script converte para o formato de treinamento:
+O script converte para:
     {"messages": [{"role": "user", ...}, {"role": "assistant", ...}]}
+
+A normalização preserva quebras de linha, Markdown e blocos de código.
 """
 
 from __future__ import annotations
@@ -20,15 +22,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "datasets" / "raw"
 PROCESSED = ROOT / "datasets" / "processed"
-INPUT_FILE = RAW / "kite_conversations_v0.1.jsonl"
+INPUT_FILE = RAW / "kite_conversations_v0.3.jsonl"
 OUTPUT_FILE = PROCESSED / "train.jsonl"
 
 
 def normalize_text(value: object) -> str:
-    """Normaliza texto sem alterar o conteúdo de forma agressiva."""
+    """Normaliza finais de linha e espaços sem destruir a formatação."""
     if not isinstance(value, str):
         raise ValueError("campo deve ser texto")
-    return " ".join(value.replace("\r\n", "\n").replace("\r", "\n").split())
+
+    text = value.replace("\r\n", "\n").replace("\r", "\n")
+    lines = [line.rstrip() for line in text.split("\n")]
+
+    while lines and not lines[0].strip():
+        lines.pop(0)
+    while lines and not lines[-1].strip():
+        lines.pop()
+
+    return "\n".join(lines)
 
 
 def normalize_example(data: object, line_number: int) -> dict:
@@ -63,8 +74,8 @@ def main() -> None:
     if not INPUT_FILE.exists():
         print("✗ Dataset de entrada não encontrado.")
         print()
-        print("Adicione um arquivo como:")
-        print("  datasets/raw/kite_conversations_v0.1.jsonl")
+        print("Adicione o arquivo:")
+        print("  datasets/raw/kite_conversations_v0.3.jsonl")
         print()
         print("Formato esperado por linha:")
         print('  {"user":"Olá!","assistant":"Olá! Como posso ajudar?"}')
