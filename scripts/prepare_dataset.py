@@ -1,7 +1,7 @@
-"""Prepare o dataset curado para o treinamento do Kite.
+"""Prepare o dataset Kite v0.7 curado para treinamento.
 
 Entrada principal:
-    datasets/raw/kite_conversations_v0.6-curated.jsonl
+    datasets/raw/kite_conversations_v0.7-curated.jsonl
 
 Cada linha deve ser um objeto JSON no formato:
     {"user": "...", "assistant": "..."}
@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "datasets" / "raw"
 PROCESSED = ROOT / "datasets" / "processed"
-INPUT_FILE = RAW / "kite_conversations_v0.6-curated.jsonl"
+INPUT_FILE = RAW / "kite_conversations_v0.7-curated.jsonl"
 OUTPUT_FILE = PROCESSED / "train.jsonl"
 
 
@@ -66,16 +66,16 @@ def fingerprint(example: dict) -> str:
 
 
 def main() -> None:
-    print("🪁 Kite — Preparação do dataset curado\n")
+    print("🪁 Kite — Preparação do dataset v0.7 curado\n")
 
     if not INPUT_FILE.exists():
         print("✗ Dataset de entrada não encontrado.")
         print()
-        print("Adicione o arquivo:")
-        print("  datasets/raw/kite_conversations_v0.6-curated.jsonl")
+        print("Adicione ou gere o arquivo:")
+        print("  datasets/raw/kite_conversations_v0.7-curated.jsonl")
         print()
-        print("Formato esperado por linha:")
-        print('  {"user":"Olá!","assistant":"Olá! Como posso ajudar?"}')
+        print("Para gerar a versão 500+:")
+        print("  python scripts/generate_kite_dataset_v0.7.py")
         return
 
     PROCESSED.mkdir(parents=True, exist_ok=True)
