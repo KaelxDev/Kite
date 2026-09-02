@@ -1,0 +1,55 @@
+name: Build Kite Dataset v0.9
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "scripts/generate_kite_dataset_v0.9.py"
+      - "datasets/raw/kite_conversations_v0.6-curated.jsonl"
+      - "datasets/raw/kite_conversations_multiturn_v0.1.jsonl"
+      - ".github/workflows/build-kite-dataset-v0.9.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-dataset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate hybrid v0.9
+        run: python scripts/generate_kite_dataset_v0.9.py
+
+      - name: Validate JSONL and hybrid structure
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path("datasets/raw/kite_conversations_v0.9-hybrid.jsonl")
+          rows = [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines() if x.strip()]
+          assert len(rows) >= 500, f"Apenas {len(rows)} exemplos"
+          assert all(isinstance(r.get("messages"), list) for r in rows)
+          assert all(r["messages"][-1]["role"] == "assistant" for r in rows)
+          multi = sum(len(r["messages"]) > 2 for r in rows)
+          assert multi >= 20, f"Poucas conversas multivoltas: {multi}"
+          print(f"OK: {len(rows)} exemplos; {multi} multivoltas")
+          PY
+
+      - name: Commit dataset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datasets/raw/kite_conversations_v0.9-hybrid.jsonl
+          if git diff --cached --quiet; then
+            echo "Nenhuma alteração no dataset."
+            exit 0
+          fi
+          git commit -m "build(dataset): generate Kite v0.9 hybrid 500+ [skip ci]"
+          git push
