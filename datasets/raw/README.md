@@ -1,27 +1,25 @@
 # Raw datasets
 
-Coloque aqui o dataset bruto usado pelo Kite.
+Coloque aqui os datasets brutos usados pelo Kite.
 
-## Arquivo esperado
+## Dataset ativo
 
-O `prepare_dataset.py` procura especificamente por:
-
-```text
-datasets/raw/kite_conversations_v0.1.jsonl
-```
-
-Ao executar:
+A preparação atual usa:
 
 ```text
-python scripts/prepare_dataset.py
+datasets/raw/kite_conversations_v0.3.jsonl
 ```
 
-se o arquivo não existir, o script mostrará:
+O v0.3 é uma camada curada focada em corrigir problemas observados na avaliação do Kite, principalmente:
 
-```text
-Adicione um arquivo como:
-  datasets/raw/kite_conversations_v0.1.jsonl
-```
+- não-fabricação e representação correta de limitações;
+- LoRA, LLM, SFT, RAG, embeddings, overfitting e generalização;
+- raciocínio aritmético e causal básico;
+- ciência básica;
+- seguimento de instruções e restrições de formato;
+- português brasileiro natural;
+- código e debugging;
+- respostas curtas, médias e longas.
 
 ## Formato
 
@@ -31,10 +29,18 @@ Uma conversa por linha, em JSONL:
 {"user":"Olá!","assistant":"Olá! Como posso ajudar?"}
 ```
 
-O preparador converte automaticamente esse formato para `messages` e gera:
+O `prepare_dataset.py` converte automaticamente esse formato para `messages` e gera:
 
 ```text
 datasets/processed/train.jsonl
 ```
 
-Não altere os arquivos brutos. Registre fonte, licença e data de obtenção em `datasets/README.md` ou nos metadados do dataset.
+A preparação preserva quebras de linha, Markdown e blocos de código para que esses padrões também possam ser aprendidos.
+
+## Histórico
+
+- `kite_conversations_v0.1.jsonl`: primeira versão curada; contém problemas identificados na auditoria anterior e não é mais a entrada ativa.
+- `kite_conversations_v0.2.jsonl`: expansão com programação, IA, instruções e formatos variados; também contém exemplos que entraram em conflito com a avaliação.
+- `kite_conversations_v0.3.jsonl`: versão curada para atacar diretamente esses conflitos.
+
+Não altere ou substitua datasets históricos sem registrar a mudança. Registre fonte, licença e data de obtenção em `datasets/README.md` ou nos metadados do dataset.
