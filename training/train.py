@@ -5,8 +5,9 @@ Uso:
     python training/train.py --yes
     python training/train.py --dry-run
 
-O pipeline usa Transformers + PEFT + Datasets diretamente para reduzir
-acoplamento com versões específicas do TRL.
+O pipeline usa Transformers + PEFT + Datasets diretamente. O dataset pode
+conter conversas de turno único ou multivoltas em formato `messages`.
+A perda é calculada somente sobre tokens associados a mensagens `assistant`.
 """
 
 from __future__ import annotations
@@ -16,13 +17,11 @@ import json
 import random
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MODEL_PATH = ROOT / "base_model" / "Qwen2.5-0.5B-Instruct"
 DATASET_PATH = ROOT / "datasets" / "processed" / "train.jsonl"
 OUTPUT_PATH = ROOT / "outputs" / "kite-lora"
 
-# Configuração inicial conservadora para o primeiro experimento.
 EPOCHS = 1
 BATCH_SIZE = 1
 GRADIENT_ACCUMULATION = 8
@@ -42,7 +41,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Valida modelo/dataset e tokeniza uma amostra sem treinar",
+        help="Valida modelo/dataset e tokeniza amostras sem treinar",
     )
     parser.add_argument(
         "--resume",
@@ -144,55 +143,77 @@ def load_examples() -> list[dict]:
     return examples
 
 
+def tokenized_assistant_spans(tokenizer, messages: list[dict]) -> tuple[list[int], list[tuple[int, int]]]:
+    """Renderiza uma conversa e retorna os intervalos de tokens dos turnos assistant."""
+    full_text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=False,
+    )
+    full_ids = tokenizer(full_text, add_special_tokens=False)["input_ids"]
+
+    spans: list[tuple[int, int]] = []
+
+    for index, message in enumerate(messages):
+        if message["role"] != "assistant":
+            continue
+
+        before_text = tokenizer.apply_chat_template(
+            messages[:index],
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+        through_text = tokenizer.apply_chat_template(
+            messages[: index + 1],
+            tokenize=False,
+            add_generation_prompt=False,
+        )
+
+        start = len(tokenizer(before_text, add_special_tokens=False)["input_ids"])
+        end = len(tokenizer(through_text, add_special_tokens=False)["input_ids"])
+
+        if end > start:
+            spans.append((start, min(end, len(full_ids))))
+
+    return full_ids, spans
+
+
 def build_dataset(tokenizer, examples: list[dict]):
     from datasets import Dataset
 
     rows = []
     skipped = 0
+    multiturn = 0
 
     for example in examples:
         messages = example["messages"]
 
         try:
-            full_text = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=False,
-            )
+            full_ids, assistant_spans = tokenized_assistant_spans(tokenizer, messages)
 
-            # Para o formato atual do Kite, calculamos o início da primeira
-            # resposta do assistente e mascaramos o prompt no loss.
-            assistant_index = next(
-                i for i, message in enumerate(messages)
-                if message["role"] == "assistant"
-            )
-            prompt_text = tokenizer.apply_chat_template(
-                messages[:assistant_index],
-                tokenize=False,
-                add_generation_prompt=True,
-            )
+            if len(messages) > 2:
+                multiturn += 1
 
-            full_ids = tokenizer(
-                full_text,
-                add_special_tokens=False,
-                truncation=True,
-                max_length=MAX_LENGTH,
-            )["input_ids"]
-            prompt_ids = tokenizer(
-                prompt_text,
-                add_special_tokens=False,
-                truncation=True,
-                max_length=MAX_LENGTH,
-            )["input_ids"]
-
-            if len(full_ids) < 2 or len(full_ids) <= len(prompt_ids):
+            if len(full_ids) < 2 or not assistant_spans:
                 skipped += 1
                 continue
 
-            labels = [-100] * min(len(prompt_ids), len(full_ids))
-            labels.extend(full_ids[len(labels):])
+            # Truncamos somente aqui, depois de encontrar os spans na sequência
+            # completa, para não perder a posição dos turnos anteriores.
+            input_ids = full_ids[:MAX_LENGTH]
+            labels = [-100] * len(input_ids)
 
-            rows.append({"input_ids": full_ids, "labels": labels})
+            for start, end in assistant_spans:
+                start = min(start, MAX_LENGTH)
+                end = min(end, MAX_LENGTH)
+                if start < end:
+                    labels[start:end] = input_ids[start:end]
+
+            if not any(label != -100 for label in labels):
+                skipped += 1
+                continue
+
+            rows.append({"input_ids": input_ids, "labels": labels})
         except Exception as exc:
             skipped += 1
             print(f"⚠ Exemplo ignorado durante tokenização: {exc}")
@@ -201,6 +222,7 @@ def build_dataset(tokenizer, examples: list[dict]):
         raise ValueError("Nenhum exemplo pôde ser tokenizado.")
 
     print(f"✓ Exemplos tokenizados: {len(rows)}")
+    print(f"✓ Conversas multivoltas detectadas: {multiturn}")
     if skipped:
         print(f"⚠ Exemplos ignorados na tokenização: {skipped}")
 
@@ -232,7 +254,8 @@ def train(args: argparse.Namespace) -> None:
     print(f"Batch:   {BATCH_SIZE} x {GRADIENT_ACCUMULATION}")
     print(f"LR:      {LEARNING_RATE}")
     print(f"Contexto máximo: {MAX_LENGTH} tokens")
-    print(f"LoRA:    r={LORA_R}, alpha={LORA_ALPHA}, dropout={LORA_DROPOUT}\n")
+    print(f"LoRA:    r={LORA_R}, alpha={LORA_ALPHA}, dropout={LORA_DROPOUT}")
+    print("Loss:    somente turnos assistant\n")
 
     if not MODEL_PATH.exists():
         raise FileNotFoundError(
@@ -246,9 +269,11 @@ def train(args: argparse.Namespace) -> None:
         tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
         dataset = build_dataset(tokenizer, examples)
         sample = dataset[0]
+        active_labels = sum(label != -100 for label in sample["labels"])
         print("\n✓ DRY-RUN concluído")
         print(f"  Exemplos: {len(dataset)}")
         print(f"  Tokens da primeira amostra: {len(sample['input_ids'])}")
+        print(f"  Tokens com loss na primeira amostra: {active_labels}")
         print("  Nenhum peso foi alterado.")
         return
 
@@ -270,7 +295,7 @@ def train(args: argparse.Namespace) -> None:
 
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_PATH,
-        torch_dtype=dtype,
+        dtype=dtype,
         low_cpu_mem_usage=True,
     )
 
