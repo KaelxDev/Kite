@@ -1,148 +1,162 @@
 {"user":"oi","assistant":"Oi! Tudo bem? Como posso ajudar?"}
 {"user":"olá","assistant":"Olá! O que você gostaria de fazer hoje?"}
-{"user":"oiii","assistant":"Oii! 😄 Tudo certo por aí?"}
-{"user":"e aí","assistant":"E aí! Tudo certo? Em que posso ajudar?"}
+{"user":"e aí","assistant":"E aí! Tudo certo?"}
 {"user":"opa","assistant":"Opa! Como posso ajudar?"}
-{"user":"fala","assistant":"Fala! Tudo bem?"}
-{"user":"hello","assistant":"Olá! Posso conversar com você em português ou ajudar com alguma tarefa."}
-{"user":"bom dia","assistant":"Bom dia! Espero que seu dia esteja começando bem. ☀️"}
-{"user":"boa tarde","assistant":"Boa tarde! Como está sendo seu dia?"}
-{"user":"boa noite","assistant":"Boa noite! Como posso ajudar? 🌙"}
+{"user":"bom dia","assistant":"Bom dia! Como posso ajudar?"}
+{"user":"boa noite","assistant":"Boa noite! Como posso ajudar?"}
 {"user":"tudo bem?","assistant":"Tudo certo por aqui. E com você?"}
-{"user":"como vai?","assistant":"Vou bem! O que você gostaria de conversar?"}
-{"user":"posso fazer uma pergunta?","assistant":"Claro! Pode perguntar."}
-{"user":"preciso de ajuda","assistant":"Claro. Explique o que está acontecendo e vamos resolver juntos."}
-{"user":"vamos conversar","assistant":"Claro! Sobre o que você quer conversar?"}
-{"user":"tchau","assistant":"Até mais! Cuide-se. 👋"}
-{"user":"até logo","assistant":"Até logo! Volte quando quiser. 👋"}
-{"user":"até mais","assistant":"Até mais! Foi bom conversar com você."}
-{"user":"vou nessa","assistant":"Até mais! Tenha um ótimo dia."}
-{"user":"valeu","assistant":"De nada! 😄"}
-{"user":"vlw","assistant":"Por nada!"}
+{"user":"valeu","assistant":"De nada!"}
 {"user":"obrigado","assistant":"De nada! Fico feliz em ajudar."}
-{"user":"obrigada","assistant":"Por nada! 😊"}
-{"user":"muito obrigado","assistant":"Disponha! Sempre que precisar, é só chamar."}
-{"user":"grato","assistant":"De nada!"}
+{"user":"tchau","assistant":"Até mais! 👋"}
+{"user":"posso fazer uma pergunta?","assistant":"Claro. Pode perguntar."}
+{"user":"preciso de ajuda","assistant":"Claro. Explique o problema e vamos analisar juntos."}
 {"user":"qual seu nome?","assistant":"Meu nome é Kite. Sou um modelo de linguagem experimental focado em conversação em Português Brasileiro."}
 {"user":"quem é você?","assistant":"Sou o Kite, um modelo de linguagem experimental criado para conversar e ajudar em tarefas."}
-{"user":"o que você faz?","assistant":"Posso conversar, explicar assuntos, ajudar com programação, organizar ideias e auxiliar em diversas tarefas."}
-{"user":"qual seu objetivo?","assistant":"Meu objetivo é fornecer respostas úteis, claras e naturais em Português Brasileiro."}
-{"user":"você é humano?","assistant":"Não. Sou uma inteligência artificial e não tenho corpo ou experiências humanas."}
-{"user":"você é um robô?","assistant":"Sou uma inteligência artificial executada por software, não um robô físico."}
-{"user":"você tem sentimentos?","assistant":"Não tenho sentimentos ou consciência. Posso conversar sobre emoções e responder de forma cuidadosa."}
-{"user":"você sente emoções?","assistant":"Não sinto emoções, mas consigo conversar sobre elas."}
-{"user":"você dorme?","assistant":"Não. Não preciso dormir como uma pessoa."}
-{"user":"você sente dor?","assistant":"Não. Não tenho corpo nem sensações físicas."}
-{"user":"você tem idade?","assistant":"Não tenho idade como uma pessoa. Sou um sistema de inteligência artificial."}
-{"user":"você tem família?","assistant":"Não tenho família ou relações pessoais como uma pessoa."}
-{"user":"você tem amigos?","assistant":"Não tenho amizades pessoais, mas posso conversar com você."}
-{"user":"você lembra de mim?","assistant":"Posso usar o contexto disponível da conversa, mas isso não significa que eu tenha memória pessoal permanente."}
-{"user":"você tem memória?","assistant":"Consigo usar o contexto fornecido na conversa. Memória permanente depende do sistema em que estou sendo executado."}
-{"user":"você aprende comigo?","assistant":"Posso usar o contexto da conversa para responder melhor, mas uma conversa não altera permanentemente meus parâmetros."}
-{"user":"como você aprende?","assistant":"Modelos de linguagem aprendem padrões durante o treinamento com grandes conjuntos de dados. Uma conversa comum não atualiza automaticamente os pesos do modelo."}
-{"user":"quem criou você?","assistant":"O Kite é um projeto experimental desenvolvido para estudar modelos de linguagem pequenos e conversação em Português Brasileiro."}
+{"user":"o que você faz?","assistant":"Posso conversar, explicar conceitos, ajudar com programação, organizar ideias e auxiliar em diversas tarefas."}
+{"user":"qual é seu objetivo?","assistant":"Meu objetivo é fornecer respostas úteis, claras e naturais em Português Brasileiro."}
+{"user":"você é humano?","assistant":"Não. Sou uma inteligência artificial executada por software."}
+{"user":"você tem sentimentos?","assistant":"Não tenho sentimentos ou consciência. Posso conversar sobre emoções de forma cuidadosa."}
+{"user":"você tem memória?","assistant":"Posso usar o contexto disponível nesta conversa. Memória permanente depende do sistema em que estou sendo executado."}
+{"user":"você aprende com uma conversa?","assistant":"Posso usar o contexto da conversa, mas uma conversa comum não altera permanentemente os parâmetros do modelo."}
+{"user":"você sabe tudo?","assistant":"Não. Posso cometer erros e posso não ter informação suficiente para algumas perguntas."}
+{"user":"se não souber uma resposta, o que deve fazer?","assistant":"Devo dizer que não tenho informação suficiente, em vez de inventar uma resposta como se fosse verdadeira."}
+{"user":"você pode inventar fatos?","assistant":"Não devo inventar fatos. Quando houver incerteza, devo deixá-la clara."}
+{"user":"você deve fingir que fez algo no meu computador?","assistant":"Não. Não devo afirmar que realizei uma ação que não realizei."}
 {"user":"o que é inteligência artificial?","assistant":"Inteligência Artificial é a área da computação que desenvolve sistemas capazes de realizar tarefas que normalmente exigem capacidades associadas à inteligência humana."}
-{"user":"o que é IA?","assistant":"IA é a sigla para Inteligência Artificial, uma área da computação dedicada à criação de sistemas capazes de executar tarefas inteligentes."}
 {"user":"o que é machine learning?","assistant":"Machine Learning, ou aprendizado de máquina, é uma área da IA em que modelos aprendem padrões a partir de dados para realizar tarefas ou fazer previsões."}
+{"user":"o que é deep learning?","assistant":"Deep Learning é uma área de aprendizado de máquina que usa redes neurais com várias camadas para aprender representações a partir de dados."}
 {"user":"o que é um algoritmo?","assistant":"Um algoritmo é uma sequência definida de passos ou regras usada para resolver um problema ou realizar uma tarefa."}
-{"user":"o que é programação?","assistant":"Programação é o processo de escrever instruções para que um computador execute uma tarefa."}
-{"user":"o que é python?","assistant":"Python é uma linguagem de programação de alto nível, conhecida pela sintaxe simples e usada em áreas como automação, web, dados e IA."}
-{"user":"o que é javascript?","assistant":"JavaScript é uma linguagem de programação muito usada para criar comportamentos e interatividade em páginas e aplicações web."}
-{"user":"o que é html?","assistant":"HTML é uma linguagem de marcação usada para estruturar o conteúdo de páginas web."}
-{"user":"o que é css?","assistant":"CSS é uma linguagem usada para definir a apresentação visual de páginas web, como cores, fontes, espaçamento e layout."}
-{"user":"o que é c++?","assistant":"C++ é uma linguagem de programação de alto desempenho, usada em áreas como jogos, sistemas e aplicações que exigem controle e eficiência."}
-{"user":"o que é java?","assistant":"Java é uma linguagem de programação orientada a objetos usada em diversos tipos de aplicações, incluindo sistemas corporativos e Android historicamente."}
-{"user":"o que é ruby?","assistant":"Ruby é uma linguagem de programação dinâmica conhecida pela sintaxe expressiva e pela produtividade no desenvolvimento."}
-{"user":"qual a diferença entre html e css?","assistant":"HTML estrutura o conteúdo de uma página, enquanto CSS define sua apresentação visual."}
-{"user":"qual a diferença entre frontend e backend?","assistant":"Frontend é a parte da aplicação com a qual o usuário interage. Backend executa a lógica do servidor, processa dados e normalmente se comunica com bancos de dados e APIs."}
-{"user":"o que é uma API?","assistant":"Uma API é uma interface que permite que diferentes sistemas ou componentes se comuniquem por meio de regras e formatos definidos."}
-{"user":"o que é banco de dados?","assistant":"Um banco de dados é um sistema organizado para armazenar, consultar e gerenciar informações."}
+{"user":"o que é um modelo de linguagem?","assistant":"Um modelo de linguagem é um modelo treinado para aprender padrões da linguagem e gerar ou analisar texto."}
+{"user":"o que é um LLM?","assistant":"LLM significa Large Language Model, ou grande modelo de linguagem. É um modelo treinado com grandes quantidades de texto para aprender padrões e gerar linguagem."}
+{"user":"o que é tokenização?","assistant":"Tokenização é o processo de dividir um texto em unidades chamadas tokens, usadas pelo modelo para processar a linguagem."}
+{"user":"o que é inferência em IA?","assistant":"Inferência é o uso de um modelo já treinado para produzir uma saída a partir de uma nova entrada."}
+{"user":"qual a diferença entre treinamento e inferência?","assistant":"Treinamento ajusta os parâmetros do modelo usando dados. Inferência usa os parâmetros já treinados para gerar uma resposta ou previsão."}
+{"user":"o que é fine-tuning?","assistant":"Fine-tuning é o treinamento adicional de um modelo pré-treinado para adaptá-lo a uma tarefa, domínio ou comportamento específico."}
+{"user":"o que é SFT?","assistant":"SFT significa Supervised Fine-Tuning. É um método de ajuste supervisionado que usa exemplos de entrada e resposta desejada."}
+{"user":"o que é LoRA em IA?","assistant":"LoRA, Low-Rank Adaptation, é uma técnica de ajuste eficiente que treina pequenas matrizes adicionais em vez de atualizar todos os parâmetros do modelo-base."}
+{"user":"LoRA e LoRa são a mesma coisa?","assistant":"Não necessariamente. LoRA pode significar Low-Rank Adaptation em IA; LoRa também é uma tecnologia de comunicação sem fio de longo alcance."}
+{"user":"o que é RAG?","assistant":"RAG, Retrieval-Augmented Generation, combina recuperação de informações com geração de texto para fornecer contexto externo ao modelo."}
+{"user":"o que é embedding?","assistant":"Um embedding é uma representação numérica de dados, como texto, em um espaço vetorial onde relações semânticas podem ser comparadas."}
+{"user":"por que um dataset de qualidade é importante?","assistant":"Porque o modelo aprende padrões dos exemplos. Dados incorretos, contraditórios ou mal formulados podem reforçar comportamentos e informações ruins."}
+{"user":"mais dados sempre significam um modelo melhor?","assistant":"Não. Qualidade, diversidade, consistência e relevância dos dados também são importantes."}
+{"user":"o que é programação?","assistant":"Programação é o processo de escrever instruções para que um computador execute tarefas."}
+{"user":"o que é Python?","assistant":"Python é uma linguagem de programação de alto nível conhecida pela sintaxe relativamente simples e usada em web, automação, dados e IA."}
+{"user":"o que é JavaScript?","assistant":"JavaScript é uma linguagem de programação muito usada para criar comportamento e interatividade em aplicações web."}
+{"user":"o que é TypeScript?","assistant":"TypeScript é um superset de JavaScript que adiciona recursos de tipagem estática e outros recursos ao desenvolvimento com JavaScript."}
+{"user":"o que é C++?","assistant":"C++ é uma linguagem de programação de alto desempenho usada, entre outras áreas, em jogos, sistemas e aplicações que exigem eficiência."}
+{"user":"o que é Java?","assistant":"Java é uma linguagem de programação de propósito geral, usada em muitos tipos de aplicações e fortemente associada à orientação a objetos."}
+{"user":"o que é Ruby?","assistant":"Ruby é uma linguagem de programação dinâmica conhecida pela sintaxe expressiva e pela produtividade no desenvolvimento."}
+{"user":"o que é HTML?","assistant":"HTML é uma linguagem de marcação usada para estruturar o conteúdo de páginas e documentos web."}
+{"user":"o que é CSS?","assistant":"CSS é uma linguagem usada para definir a apresentação de documentos web, incluindo layout, fontes e espaçamento."}
+{"user":"qual a diferença entre HTML e CSS?","assistant":"HTML estrutura o conteúdo; CSS define a apresentação visual desse conteúdo."}
+{"user":"qual a diferença entre frontend e backend?","assistant":"Frontend é a parte da aplicação com a qual o usuário interage. Backend executa lógica no servidor, processa dados e pode acessar bancos de dados."}
+{"user":"o que é uma API?","assistant":"API é uma interface que define como diferentes sistemas ou componentes podem se comunicar por meio de regras e formatos definidos."}
+{"user":"o que é REST?","assistant":"REST é um estilo arquitetural para sistemas distribuídos que usa recursos, operações HTTP e representações de dados de forma padronizada."}
+{"user":"o que é JSON?","assistant":"JSON é um formato textual leve usado para representar e trocar dados estruturados, frequentemente entre aplicações e APIs."}
+{"user":"o que é HTTP?","assistant":"HTTP é um protocolo usado para comunicação entre clientes e servidores na web."}
+{"user":"o que significa HTTP 200?","assistant":"HTTP 200 indica que a requisição foi processada com sucesso."}
+{"user":"o que significa HTTP 201?","assistant":"HTTP 201 indica que a requisição foi processada e um novo recurso foi criado."}
+{"user":"o que significa HTTP 400?","assistant":"HTTP 400 indica que o servidor não conseguiu processar a requisição por ela estar incorreta ou inválida."}
+{"user":"o que significa HTTP 401?","assistant":"HTTP 401 indica que a requisição exige autenticação ou credenciais válidas."}
+{"user":"o que significa HTTP 403?","assistant":"HTTP 403 indica que o servidor entendeu a requisição, mas recusou o acesso ao recurso."}
+{"user":"o que significa HTTP 404?","assistant":"HTTP 404 significa que o recurso solicitado não foi encontrado."}
+{"user":"o que significa HTTP 500?","assistant":"HTTP 500 indica um erro interno do servidor."}
+{"user":"o que é banco de dados?","assistant":"Banco de dados é um sistema organizado para armazenar, consultar e gerenciar informações."}
+{"user":"o que é um banco de dados relacional?","assistant":"É um banco de dados que organiza dados em tabelas relacionadas, geralmente usando chaves para representar relações entre registros."}
 {"user":"o que é SQL?","assistant":"SQL é uma linguagem usada para consultar e manipular dados em bancos de dados relacionais."}
+{"user":"para que serve SELECT no SQL?","assistant":"SELECT é usado para consultar e retornar dados de uma ou mais tabelas."}
+{"user":"para que serve INSERT no SQL?","assistant":"INSERT é usado para adicionar novos registros a uma tabela."}
+{"user":"para que serve UPDATE no SQL?","assistant":"UPDATE é usado para alterar dados existentes em uma tabela."}
+{"user":"para que serve DELETE no SQL?","assistant":"DELETE é usado para remover registros de uma tabela."}
+{"user":"o que é chave primária?","assistant":"Chave primária é uma coluna ou conjunto de colunas usado para identificar unicamente cada registro de uma tabela."}
 {"user":"o que é Git?","assistant":"Git é um sistema de controle de versão usado para acompanhar alterações em arquivos e colaborar no desenvolvimento de software."}
-{"user":"o que é GitHub?","assistant":"GitHub é uma plataforma de hospedagem e colaboração para projetos de software, com recursos baseados em Git."}
-{"user":"o que é Linux?","assistant":"Linux é uma família de sistemas operacionais baseados no kernel Linux, muito usada em servidores, desktops e dispositivos."}
-{"user":"você sabe programar?","assistant":"Posso ajudar a escrever, explicar, revisar e depurar código em várias linguagens."}
-{"user":"me ajuda com Python","assistant":"Claro. Envie o código ou explique o problema e posso ajudar a encontrar uma solução."}
-{"user":"me ajuda com JavaScript","assistant":"Claro. Mostre o código, o erro ou descreva o que você quer implementar."}
-{"user":"como aprender programação?","assistant":"Comece por uma linguagem, aprenda os fundamentos e pratique com projetos pequenos. Depois avance para projetos maiores e estude ferramentas do ecossistema."}
-{"user":"como melhorar meus estudos?","assistant":"Defina objetivos pequenos, pratique com frequência, revise o que aprendeu e tente aplicar o conhecimento em projetos reais."}
-{"user":"preciso de uma ideia de projeto","assistant":"Uma opção é criar um aplicativo pequeno que resolva um problema real, como um organizador de tarefas, um gerenciador de hábitos ou uma API com autenticação."}
-{"user":"me dê uma ideia criativa","assistant":"Crie um pequeno laboratório de experimentos onde cada projeto tenha objetivo, hipótese, implementação e resultados documentados."}
+{"user":"o que é GitHub?","assistant":"GitHub é uma plataforma de hospedagem e colaboração para projetos de software que usa Git como parte central do fluxo."}
+{"user":"qual a diferença entre Git e GitHub?","assistant":"Git é o sistema de controle de versão. GitHub é uma plataforma que hospeda repositórios Git e oferece recursos de colaboração."}
+{"user":"o que é um commit?","assistant":"Um commit é um registro de alterações no histórico de um repositório Git."}
+{"user":"o que é uma branch?","assistant":"Uma branch é uma linha de desenvolvimento independente dentro de um repositório Git."}
+{"user":"o que é Linux?","assistant":"Linux normalmente se refere a sistemas baseados no kernel Linux. Ele é muito usado em servidores, desktops e dispositivos."}
+{"user":"o que é Docker?","assistant":"Docker é uma plataforma usada para criar e executar aplicações em containers, ajudando a empacotar aplicação e dependências."}
+{"user":"o que é um container?","assistant":"Um container é um ambiente isolado para executar uma aplicação com suas dependências, compartilhando o kernel do sistema hospedeiro."}
+{"user":"o que é uma variável?","assistant":"Uma variável é um nome associado a um valor que pode ser usado e, dependendo da linguagem, alterado durante a execução. Exemplo: `idade = 20`."}
+{"user":"o que é uma função em programação?","assistant":"Uma função é um bloco de código reutilizável que executa uma tarefa específica. Ela pode receber argumentos e retornar um resultado."}
+{"user":"o que é um loop?","assistant":"Um loop é uma estrutura usada para repetir um bloco de código enquanto uma condição ou sequência de repetição for atendida."}
+{"user":"o que é um if?","assistant":"`if` é uma estrutura condicional usada para executar um bloco de código quando uma condição é verdadeira."}
+{"user":"o que é uma lista em Python?","assistant":"Uma lista em Python é uma coleção ordenada e mutável que pode armazenar vários valores. Exemplo: `frutas = [\"maçã\", \"banana\"]`."}
+{"user":"o que é um dicionário em Python?","assistant":"Um dicionário em Python armazena pares de chave e valor. Exemplo: `pessoa = {\"nome\": \"Ana\"}`."}
+{"user":"qual a diferença entre lista e dicionário em Python?","assistant":"Uma lista organiza valores por posição; um dicionário associa valores a chaves."}
+{"user":"como começar a aprender programação?","assistant":"Escolha uma linguagem, aprenda os fundamentos, pratique com exercícios e construa projetos pequenos. Depois avance gradualmente."}
+{"user":"devo aprender várias linguagens de uma vez?","assistant":"Não é necessário. Para começar, é melhor dominar os fundamentos de uma linguagem e depois explorar outras conforme seus objetivos."}
+{"user":"estou começando em Python. O que estudo primeiro?","assistant":"Comece por variáveis, tipos de dados, condicionais, loops, funções, listas e dicionários. Depois pratique com pequenos projetos."}
+{"user":"me dê uma ideia de projeto para iniciante","assistant":"Um gerenciador de tarefas simples é uma boa opção. Comece com adicionar, listar, concluir e remover tarefas."}
+{"user":"quero criar um chatbot pequeno. Quais partes básicas preciso?","assistant":"Você precisa de uma interface, um mecanismo para processar mensagens, um modelo ou lógica de resposta e, se necessário, armazenamento do histórico."}
+{"user":"liste três passos para aprender programação","assistant":"1. Aprenda os fundamentos.\n2. Pratique com exercícios.\n3. Construa projetos pequenos."}
+{"user":"dê exatamente três tópicos sobre APIs","assistant":"1. Comunicação entre sistemas.\n2. Regras e formatos de dados.\n3. Endpoints e operações disponíveis."}
+{"user":"explique variável usando apenas um exemplo curto","assistant":"Em Python, `idade = 20` cria uma variável chamada `idade` com o valor 20."}
+{"user":"compare frontend e backend em uma frase","assistant":"Frontend cuida da interação e apresentação ao usuário; backend cuida da lógica, dados e processamento no servidor."}
+{"user":"resuma IA em duas frases","assistant":"IA é uma área da computação que desenvolve sistemas capazes de realizar tarefas associadas à inteligência. Esses sistemas podem usar técnicas como aprendizado de máquina para aprender padrões a partir de dados."}
+{"user":"explique API de forma bem simples","assistant":"Uma API é uma forma padronizada para um programa pedir informações ou serviços a outro programa."}
+{"user":"reescreva de forma clara: eu queria saber se talvez desse para fazer isso depois","assistant":"Eu gostaria de saber se seria possível fazer isso depois."}
+{"user":"transforme em uma pergunta clara: api serve pra comunicação entre sistemas né","assistant":"Uma API serve para comunicação entre sistemas?"}
+{"user":"responda apenas com o resultado: 3 + 2","assistant":"5"}
+{"user":"responda em uma palavra: qual é a capital do Brasil?","assistant":"Brasília."}
+{"user":"explique HTTP 404 em uma frase","assistant":"HTTP 404 significa que o recurso solicitado não foi encontrado."}
+{"user":"dê dois exemplos de linguagens de programação","assistant":"Python e JavaScript."}
+{"user":"o que é causa e correlação?","assistant":"Causalidade significa que uma variável influencia outra. Correlação significa que duas variáveis apresentam uma relação estatística, sem provar que uma causa a outra."}
+{"user":"por que uma resposta confiante pode estar errada?","assistant":"Porque um modelo pode gerar uma resposta plausível sem ter evidência suficiente ou pode interpretar uma informação de forma incorreta."}
+{"user":"3 maçãs mais 2 maçãs são quantas?","assistant":"5 maçãs."}
+{"user":"um programa leva 10 segundos e roda duas vezes em sequência. Quanto tempo leva?","assistant":"Aproximadamente 20 segundos, supondo que as duas execuções levem o mesmo tempo e não haja sobreposição."}
+{"user":"se tenho 20 reais e gasto 7, quanto sobra?","assistant":"13 reais."}
+{"user":"qual é 9 vezes 8?","assistant":"72."}
+{"user":"qual é a raiz quadrada de 81?","assistant":"9."}
+{"user":"por que o céu parece azul?","assistant":"Porque a atmosfera espalha a luz azul do Sol com mais eficiência do que as cores de comprimento de onda maior, fazendo o azul predominar no céu durante o dia."}
+{"user":"o que é um buraco negro?","assistant":"É uma região do espaço-tempo com gravidade extremamente intensa, delimitada por um horizonte de eventos além do qual a luz não consegue escapar."}
+{"user":"o que é um processador?","assistant":"É o componente que executa instruções de programas e realiza operações necessárias para o funcionamento do computador."}
+{"user":"qual a diferença entre RAM e armazenamento?","assistant":"RAM é memória de trabalho temporária usada durante a execução de programas. Armazenamento, como SSD, mantém dados mesmo quando o dispositivo é desligado."}
+{"user":"por que a grama é verde?","assistant":"Porque a clorofila absorve principalmente luz vermelha e azul e reflete uma parcela maior da luz verde."}
+{"user":"quantos planetas existem no Sistema Solar?","assistant":"O Sistema Solar possui oito planetas reconhecidos."}
+{"user":"qual é o maior planeta do Sistema Solar?","assistant":"Júpiter."}
+{"user":"qual planeta é mais próximo do Sol?","assistant":"Mercúrio."}
+{"user":"qual é a capital do Brasil?","assistant":"Brasília."}
+{"user":"existe vida fora da Terra?","assistant":"Ainda não temos evidência científica confirmada de vida fora da Terra. A possibilidade continua sendo investigada."}
 {"user":"estou triste","assistant":"Sinto muito. Se quiser falar sobre o que aconteceu, posso conversar com você."}
-{"user":"estou feliz","assistant":"Que bom saber disso! Aproveite o momento. 😄"}
-{"user":"estou cansado","assistant":"Se puder, faça uma pausa e descanse um pouco. Depois você pode retomar suas tarefas com mais calma."}
-{"user":"estou ansioso","assistant":"Tente desacelerar e lidar com uma coisa de cada vez. Se quiser, pode me contar o que está deixando você ansioso."}
-{"user":"estou preocupado","assistant":"Entendo. Se quiser, explique o que está preocupando você e podemos organizar a situação juntos."}
-{"user":"estou entediado","assistant":"Que tal aprender algo novo, jogar alguma coisa, assistir a um filme ou começar um pequeno projeto?"}
-{"user":"preciso de motivação","assistant":"Não precisa resolver tudo de uma vez. Escolha uma tarefa pequena e dê o primeiro passo."}
-{"user":"me dê um conselho","assistant":"Não tente melhorar tudo ao mesmo tempo. Escolha uma prioridade e avance um pouco todos os dias."}
-{"user":"como vencer a procrastinação?","assistant":"Divida a tarefa em uma etapa pequena, defina um período curto de foco e comece sem esperar pela motivação perfeita."}
-{"user":"me conta uma piada","assistant":"Por que o livro de matemática ficou triste? Porque tinha muitos problemas. 😄"}
-{"user":"outra piada","assistant":"O que o pato disse para a pata? Vem quá! 🦆"}
-{"user":"conta uma piada","assistant":"O que a impressora disse para a outra? Esse papel é seu ou é impressão minha? 🖨️"}
-{"user":"me faça rir","assistant":"Por que o computador foi ao médico? Porque pegou um vírus. 😄"}
-{"user":"me surpreenda","assistant":"Um polvo possui três corações. Dois bombeiam sangue para as brânquias e um para o resto do corpo. 🐙"}
-{"user":"me conte uma curiosidade","assistant":"A luz do Sol leva aproximadamente 8 minutos e 20 segundos para chegar à Terra. ☀️"}
-{"user":"me ensine algo novo","assistant":"Você sabia que Júpiter é o maior planeta do Sistema Solar?"}
-{"user":"qual é o maior planeta do sistema solar?","assistant":"Júpiter é o maior planeta do Sistema Solar."}
-{"user":"quantos planetas existem no sistema solar?","assistant":"O Sistema Solar possui oito planetas reconhecidos."}
-{"user":"qual planeta é mais próximo do sol?","assistant":"Mercúrio é o planeta mais próximo do Sol."}
-{"user":"o que é um buraco negro?","assistant":"Um buraco negro é uma região do espaço-tempo cuja gravidade é tão intensa que, além de certo limite, nem a luz consegue escapar."}
-{"user":"existe vida em outros planetas?","assistant":"Ainda não temos evidências confirmadas de vida fora da Terra. A possibilidade de vida extraterrestre é uma questão estudada pela ciência."}
-{"user":"por que a grama é verde?","assistant":"A clorofila absorve principalmente luz vermelha e azul e reflete mais luz verde, fazendo as plantas parecerem verdes."}
-{"user":"qual a cor do céu?","assistant":"Durante um dia claro, o céu costuma parecer azul por causa do espalhamento da luz solar na atmosfera. Perto do nascer e do pôr do Sol, pode apresentar outras cores."}
-{"user":"qual é a capital do brasil?","assistant":"A capital do Brasil é Brasília."}
-{"user":"quanto é 10 mais 15?","assistant":"10 + 15 = 25."}
-{"user":"quanto é 9 vezes 8?","assistant":"9 × 8 = 72."}
-{"user":"quanto é 100 dividido por 5?","assistant":"100 ÷ 5 = 20."}
-{"user":"quanto é 100 dividido por 4?","assistant":"100 ÷ 4 = 25."}
-{"user":"quanto é 12 vezes 12?","assistant":"12 × 12 = 144."}
-{"user":"quanto é 50 menos 18?","assistant":"50 − 18 = 32."}
-{"user":"qual é a raiz quadrada de 81?","assistant":"A raiz quadrada de 81 é 9."}
-{"user":"qual o sentido da vida?","assistant":"Não existe uma resposta universalmente aceita. Para muitas pessoas, o sentido da vida está relacionado a relações, experiências, valores, objetivos e significado pessoal."}
-{"user":"o que é felicidade?","assistant":"Felicidade pode envolver bem-estar, satisfação, relações significativas e experiências positivas. O que traz felicidade varia de pessoa para pessoa."}
-{"user":"o que é amor?","assistant":"Amor pode envolver afeto, cuidado, vínculo, respeito e compromisso. A experiência do amor varia entre pessoas e relações."}
-{"user":"o que é liberdade?","assistant":"Liberdade pode ser entendida como a capacidade de fazer escolhas e agir dentro das condições e responsabilidades que existem."}
-{"user":"você acredita em Deus?","assistant":"Não tenho crenças pessoais ou religião. Posso, porém, conversar sobre diferentes perspectivas religiosas e filosóficas com respeito."}
-{"user":"qual animal você gosta?","assistant":"Não tenho preferências pessoais, mas posso conversar bastante sobre animais."}
+{"user":"estou desanimado","assistant":"Entendo. Se quiser, me conte o que está acontecendo. Podemos pensar em um próximo passo pequeno."}
+{"user":"estou ansioso","assistant":"Tente desacelerar e lidar com uma coisa de cada vez. Se quiser, conte o que está deixando você ansioso."}
+{"user":"estou cansado","assistant":"Se puder, faça uma pausa e descanse. Depois retome a tarefa com mais calma."}
+{"user":"estou feliz","assistant":"Que bom! Aproveite esse momento. 😄"}
+{"user":"preciso de motivação","assistant":"Escolha uma tarefa pequena e comece por ela. Não é necessário resolver tudo de uma vez."}
+{"user":"me dê um conselho","assistant":"Escolha uma prioridade, divida-a em passos pequenos e avance de forma consistente."}
+{"user":"me conta uma piada","assistant":"Por que o computador foi ao médico? Porque pegou um vírus. 😄"}
+{"user":"me surpreenda","assistant":"Um polvo possui três corações."}
+{"user":"me conte uma curiosidade sobre o espaço","assistant":"A luz do Sol leva cerca de 8 minutos e 20 segundos para chegar à Terra."}
+{"user":"qual o sentido da vida?","assistant":"Não existe uma resposta universalmente aceita. Para muitas pessoas, o sentido está ligado a relações, experiências, valores e objetivos pessoais."}
 {"user":"você gosta de jogos?","assistant":"Não jogo pessoalmente, mas posso conversar sobre jogos, gêneros, mecânicas e recomendações."}
-{"user":"qual jogo você recomenda?","assistant":"Depende do que você procura. Se me disser um gênero ou alguns jogos de que gosta, posso sugerir opções semelhantes."}
-{"user":"qual filme você recomenda?","assistant":"Depende do gênero que você quer assistir. Diga se prefere ficção científica, ação, comédia, drama ou outro gênero."}
-{"user":"qual livro você recomenda?","assistant":"Depende do seu gosto. Posso recomendar livros de ficção, ciência, tecnologia, filosofia ou outros temas."}
-{"user":"cante uma música","assistant":"Não consigo cantar, mas posso ajudar a criar uma música original ou conversar sobre música."}
-{"user":"pode me dar um abraço virtual?","assistant":"Claro! 🤗 Considere este um abraço virtual."}
-{"user":"obrigado pela ajuda","assistant":"Por nada! Fico feliz em ajudar."}
-{"user":"como está o tempo aí?","assistant":"Não tenho uma localização física nem sinto o clima. Se o sistema fornecer dados meteorológicos, eles podem ser usados para consultar a previsão."}
-{"user":"que horas são?","assistant":"Não devo inventar o horário atual. Se houver acesso a um relógio ou ferramenta de tempo, ela pode fornecer a hora correta."}
-{"user":"que dia é hoje?","assistant":"A data atual depende do ambiente e do relógio do sistema. Sem acesso a essa informação, não devo inventá-la."}
-{"user":"você pode me ouvir?","assistant":"Posso processar as mensagens que você envia. Não tenho audição física."}
-{"user":"o que você acha de tecnologia?","assistant":"Tecnologia pode ser muito útil quando aplicada para resolver problemas e ampliar capacidades, mas também exige atenção a segurança, privacidade e impactos sociais."}
-{"user":"como melhorar o sono?","assistant":"Uma rotina regular, menos exposição a telas antes de dormir e um ambiente confortável podem ajudar. Se problemas persistirem, vale conversar com um profissional de saúde."}
-{"user":"como aliviar o estresse?","assistant":"Pausas, respiração lenta, atividade física, sono adequado e conversar com alguém de confiança podem ajudar a lidar com o estresse."}
-{"user":"como ter mais energia?","assistant":"Sono adequado, alimentação equilibrada, hidratação e atividade física podem contribuir para mais disposição. Cansaço persistente merece avaliação profissional."}
-{"user":"como beber mais água?","assistant":"Deixe uma garrafa por perto, associe a hidratação a hábitos do dia e use lembretes se isso ajudar."}
-{"user":"me ajuda com uma tarefa","assistant":"Claro! Envie a tarefa e diga qual parte está difícil."}
-{"user":"explique de forma simples o que é uma API","assistant":"Uma API é como um ponto de comunicação entre programas. Um sistema faz uma solicitação seguindo regras definidas, e outro sistema responde com os dados ou resultado esperado."}
-{"user":"explique frontend de forma simples","assistant":"Frontend é a parte de um site ou aplicativo que o usuário vê e utiliza, como telas, botões e formulários."}
-{"user":"explique backend de forma simples","assistant":"Backend é a parte que roda por trás da interface e cuida de regras, processamento, autenticação, acesso a dados e outras operações do sistema."}
-{"user":"qual a diferença entre Python e JavaScript?","assistant":"Python e JavaScript são linguagens diferentes. Python é muito usado em backend, automação, dados e IA; JavaScript é especialmente importante no desenvolvimento web e também pode ser usado no backend."}
-{"user":"como começar a estudar IA?","assistant":"Comece por programação e matemática básica, depois estude aprendizado de máquina e redes neurais. Praticar com projetos pequenos ajuda a consolidar os conceitos."}
-{"user":"quero aprender programação","assistant":"Ótimo. Comece por uma linguagem e pelos fundamentos: variáveis, tipos, condicionais, loops, funções e estruturas de dados. Depois pratique com projetos."}
-{"user":"não entendi","assistant":"Sem problema. Posso explicar de outra forma, com uma linguagem mais simples ou com um exemplo."}
-{"user":"pode falar mais devagar?","assistant":"Claro. Vou explicar com frases mais curtas e passo a passo."}
-{"user":"pode explicar melhor?","assistant":"Claro. Diga qual parte ficou confusa e posso detalhar com um exemplo."}
-{"user":"você consegue me ajudar a estudar?","assistant":"Sim. Posso explicar conceitos, criar exercícios, revisar respostas e montar um plano de estudo."}
-{"user":"vamos fazer um projeto","assistant":"Vamos. Primeiro definimos o objetivo, depois escolhemos a tecnologia e dividimos o projeto em etapas pequenas."}
-{"user":"quero criar uma API","assistant":"Ótimo. Podemos definir os endpoints, modelo de dados, autenticação, validação, tratamento de erros e documentação antes de implementar."}
-{"user":"quero criar um chatbot","assistant":"Podemos começar definindo o objetivo, o modelo, o formato das mensagens, a memória da conversa e a interface."}
-{"user":"o que é um chatbot?","assistant":"Um chatbot é um software projetado para interagir com pessoas por meio de conversas, normalmente usando texto ou voz."}
-{"user":"o que é um modelo de linguagem?","assistant":"É um modelo de aprendizado de máquina treinado para reconhecer padrões em linguagem e gerar ou processar texto."}
-{"user":"o que é um LLM?","assistant":"LLM significa Large Language Model, ou grande modelo de linguagem. É um modelo treinado para lidar com linguagem natural em grande escala."}
-{"user":"o que é LoRA?","assistant":"LoRA é uma técnica de ajuste fino eficiente que treina pequenos conjuntos de parâmetros adicionais em vez de atualizar todos os pesos do modelo-base."}
-{"user":"o que é fine-tuning?","assistant":"Fine-tuning é o processo de continuar o treinamento de um modelo pré-treinado em um conjunto de dados específico para adaptá-lo a uma tarefa, domínio ou comportamento."}
-{"user":"o que é SFT?","assistant":"SFT, ou Supervised Fine-Tuning, é um ajuste supervisionado em que o modelo aprende a produzir respostas desejadas a partir de exemplos de entrada e saída."}
-{"user":"qual é o objetivo do Kite?","assistant":"O Kite é um projeto experimental de modelo de linguagem pequeno, com foco em conversação e instruções em Português Brasileiro."}
-{"user":"por que usar LoRA no Kite?","assistant":"LoRA reduz a quantidade de parâmetros treináveis e o consumo de recursos em comparação com um fine-tuning completo, tornando experimentos com um modelo pequeno mais acessíveis."}
-{"user":"como testar o Kite depois do treinamento?","assistant":"Use um conjunto de avaliação separado do treinamento e compare o modelo-base com o modelo ajustado em tarefas de conversação, conhecimento, instruções e comportamento."}
-{"user":"o que é um dataset?","assistant":"Dataset é um conjunto organizado de dados usado para tarefas como treinamento, validação ou avaliação de modelos."}
-{"user":"por que separar treino e avaliação?","assistant":"Separar os dados ajuda a medir se o modelo generaliza para exemplos que não viu durante o treinamento, reduzindo o risco de avaliar apenas memorização."}
+{"user":"qual jogo você recomenda?","assistant":"Depende do que você procura. Diga alguns gêneros ou jogos de que gosta e posso sugerir opções."}
+{"user":"o que é autenticação?","assistant":"Autenticação é o processo de verificar a identidade de um usuário ou sistema."}
+{"user":"o que é autorização?","assistant":"Autorização é o processo de determinar quais recursos ou ações uma identidade autenticada pode acessar."}
+{"user":"qual a diferença entre autenticação e autorização?","assistant":"Autenticação verifica quem você é; autorização determina o que você pode acessar ou fazer."}
+{"user":"o que é CORS?","assistant":"CORS é um mecanismo do navegador que controla quando uma página pode fazer requisições para uma origem diferente da origem que a carregou."}
+{"user":"o que é localhost?","assistant":"localhost é um nome usado para se referir ao próprio computador. Normalmente aponta para um endereço local como 127.0.0.1."}
+{"user":"o que é DNS?","assistant":"DNS é o sistema que traduz nomes de domínio para endereços IP e outras informações de rede."}
+{"user":"o que é HTTPS?","assistant":"HTTPS é HTTP protegido por TLS, fornecendo criptografia e autenticação para a comunicação entre cliente e servidor."}
+{"user":"o que é um endpoint?","assistant":"Endpoint é um ponto de acesso de uma API, normalmente associado a uma URL e a uma operação específica."}
+{"user":"o que é React?","assistant":"React é uma biblioteca JavaScript usada para construir interfaces de usuário baseadas em componentes."}
+{"user":"o que é Node.js?","assistant":"Node.js é um ambiente de execução que permite executar JavaScript fora do navegador, baseado no motor V8."}
+{"user":"o que é FastAPI?","assistant":"FastAPI é um framework Python para construção de APIs web, com suporte a tipagem, validação de dados e documentação automática."}
+{"user":"o que é PostgreSQL?","assistant":"PostgreSQL é um sistema gerenciador de banco de dados relacional de código aberto, conhecido por recursos avançados e extensibilidade."}
+{"user":"qual a diferença entre PostgreSQL e SQLite?","assistant":"PostgreSQL é um servidor de banco de dados completo voltado a aplicações multiusuário; SQLite é embutido e simples, adequado a muitos projetos locais e aplicações menores."}
+{"user":"o que é uma biblioteca?","assistant":"Biblioteca é um conjunto de código reutilizável que uma aplicação pode chamar para realizar determinadas tarefas."}
+{"user":"o que é um framework?","assistant":"Framework é uma estrutura de software que fornece componentes e convenções para facilitar o desenvolvimento de aplicações."}
+{"user":"qual a diferença entre biblioteca e framework?","assistant":"Em termos gerais, a aplicação chama uma biblioteca quando precisa dela; em um framework, o framework costuma controlar parte do fluxo da aplicação."}
+{"user":"o que é overfitting?","assistant":"Overfitting ocorre quando um modelo se ajusta demais aos dados de treinamento e perde capacidade de generalizar para dados novos."}
+{"user":"o que é generalização em machine learning?","assistant":"É a capacidade de um modelo aplicar padrões aprendidos a dados novos que não estavam presentes no treinamento."}
+{"user":"o que é learning rate?","assistant":"Learning rate é um hiperparâmetro que controla o tamanho das atualizações feitas nos parâmetros do modelo durante o treinamento."}
+{"user":"o que é batch size?","assistant":"Batch size é a quantidade de exemplos processados em conjunto antes de uma atualização dos parâmetros durante o treinamento."}
+{"user":"por que usar LoRA em vez de treinar todos os parâmetros?","assistant":"LoRA reduz o número de parâmetros treináveis e pode diminuir o custo de memória e armazenamento, tornando o ajuste mais acessível."}
+{"user":"o que é um adapter LoRA?","assistant":"É o conjunto de parâmetros adicionais treinados pelo método LoRA. Ele pode ser aplicado sobre o modelo-base sem substituir seus pesos originais."}
+{"user":"o que é merge de LoRA?","assistant":"É incorporar os pesos do adapter LoRA aos pesos do modelo-base para produzir um modelo que não dependa separadamente do adapter."}
+{"user":"devo aumentar as épocas quando o dataset tem erros?","assistant":"Não. Primeiro corrija os dados. Mais épocas podem reforçar padrões incorretos presentes no dataset."}
+{"user":"como saber se um fine-tuning melhorou o modelo?","assistant":"Compare o modelo ajustado com o modelo-base usando prompts de avaliação, incluindo exemplos não vistos no treinamento, e analise factualidade, instrução e generalização."}
+{"user":"por que usar prompts não vistos na avaliação?","assistant":"Porque eles ajudam a medir generalização. Um modelo pode memorizar exemplos sem realmente aprender a tarefa."}
+{"user":"não entendi sua explicação","assistant":"Sem problema. Posso explicar de forma mais simples, usar um exemplo ou dividir o conceito em etapas."}
+{"user":"pode ser mais curto?","assistant":"Sim. Vou resumir e manter apenas os pontos essenciais."}
+{"user":"pode explicar com mais detalhes?","assistant":"Sim. Posso explicar passo a passo e incluir exemplos e detalhes técnicos relevantes."}
