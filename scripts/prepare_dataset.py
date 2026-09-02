@@ -1,13 +1,13 @@
 """Prepare o dataset curado para o treinamento do Kite.
 
 Entrada principal:
-    datasets/raw/kite_conversations_v0.5-clean.jsonl
+    datasets/raw/kite_conversations_v0.6-curated.jsonl
 
 Cada linha deve ser um objeto JSON no formato:
     {"user": "...", "assistant": "..."}
 
 O script preserva quebras de linha, Markdown e blocos de código,
-remove duplicatas exatas e converte para o formato `messages`.
+remove duplicatas exatas e converte tudo para o formato `messages`.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "datasets" / "raw"
 PROCESSED = ROOT / "datasets" / "processed"
-INPUT_FILE = RAW / "kite_conversations_v0.5-clean.jsonl"
+INPUT_FILE = RAW / "kite_conversations_v0.6-curated.jsonl"
 OUTPUT_FILE = PROCESSED / "train.jsonl"
 
 
@@ -72,7 +72,7 @@ def main() -> None:
         print("✗ Dataset de entrada não encontrado.")
         print()
         print("Adicione o arquivo:")
-        print("  datasets/raw/kite_conversations_v0.5-clean.jsonl")
+        print("  datasets/raw/kite_conversations_v0.6-curated.jsonl")
         print()
         print("Formato esperado por linha:")
         print('  {"user":"Olá!","assistant":"Olá! Como posso ajudar?"}')
