@@ -1,17 +1,26 @@
 """Gera o dataset híbrido do Kite v0.9.
 
-Objetivo: aumentar cobertura sem inflar o dataset com simples paráfrases.
-Fontes preservadas:
-- v0.6-curated: base single-turn
-- multiturn_v0.1: conversas multivoltas
+P0: diversidade semântica e redução de padrões mecânicos.
 
-As expansões abaixo mudam a tarefa (definição, diagnóstico, decisão ou
-aplicação), em vez de apenas trocar palavras da mesma pergunta.
+A versão anterior gerava quatro perguntas quase idênticas para cada conceito.
+Isso foi substituído por um banco de tarefas com objetivos diferentes:
+- explicação curta;
+- contraste entre conceitos;
+- diagnóstico de erro;
+- decisão de projeto;
+- aplicação prática;
+- verificação de entendimento.
+
+A geração é determinística, preserva os datasets curados e usa deduplicação
+exata. O alvo é 520 exemplos, mas a seleção não corta uma sequência gerada no
+meio de um bloco de conceito: os candidatos são embaralhados de forma
+reprodutível e escolhidos por uma cota equilibrada entre famílias de tarefa.
 """
 from __future__ import annotations
 
-import json
 import hashlib
+import json
+import random
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,9 +29,10 @@ OUT = RAW / "kite_conversations_v0.9-hybrid.jsonl"
 BASE = RAW / "kite_conversations_v0.6-curated.jsonl"
 MULTI = RAW / "kite_conversations_multiturn_v0.1.jsonl"
 TARGET = 520
+SEED = 20260902
 
-# Cada item descreve uma ideia. As quatro tarefas geradas têm objetivos
-# diferentes e, portanto, não são simples paráfrases.
+# O conteúdo factual é curto de propósito: a tarefa deve ensinar a ideia,
+# enquanto o modelo aprende diferentes formas de chegar à mesma resposta.
 CURRICULUM = [
 ("LLM", "Um LLM aprende padrões estatísticos de linguagem e os usa para estimar ou gerar sequências de tokens."),
 ("token", "Um token é uma unidade da representação textual usada pelo modelo; sua granularidade depende do tokenizador."),
@@ -119,11 +129,55 @@ CURRICULUM = [
 ("natural selection", "Seleção natural altera a frequência de características hereditárias quando diferenças de reprodução estão associadas ao ambiente."),
 ]
 
+TASK_FAMILIES = ("explain", "contrast", "diagnose", "decision", "apply", "verify")
 
-def read_jsonl(path: Path):
+PROMPTS = {
+    "explain": [
+        "Explique {concept} para alguém que está começando em programação ou IA.",
+        "Qual é a ideia central de {concept}? Responda de forma objetiva.",
+        "Quero entender {concept} sem uma explicação excessivamente acadêmica. Como você explicaria?",
+    ],
+    "contrast": [
+        "Qual é a diferença entre {concept} e um conceito próximo? Dê um exemplo para deixar a distinção clara.",
+        "Estou confundindo {concept} com outra ideia parecida. Como separo corretamente os dois conceitos?",
+        "Que erro conceitual alguém poderia cometer ao comparar {concept} com uma técnica ou conceito relacionado?",
+    ],
+    "diagnose": [
+        "Um colega descreveu {concept} de uma forma que parece errada. O que você corrigiria e por quê?",
+        "Considere uma implementação que usa {concept}, mas apresenta um resultado inesperado. O que eu deveria verificar primeiro?",
+        "Qual é um diagnóstico simples para descobrir se {concept} está sendo entendido ou aplicado incorretamente?",
+    ],
+    "decision": [
+        "Em que situação de um projeto real faz sentido escolher ou considerar {concept}?",
+        "Tenho um projeto pequeno e preciso decidir se {concept} é necessário. Que critério devo usar?",
+        "Qual trade-off devo considerar antes de adotar {concept} em um sistema?",
+    ],
+    "apply": [
+        "Dê um exemplo prático de {concept} em um projeto de software ou IA.",
+        "Como {concept} apareceria no dia a dia de quem desenvolve uma aplicação?",
+        "Transforme a definição de {concept} em uma situação concreta de projeto.",
+    ],
+    "verify": [
+        "Como eu verificaria, por teste ou observação, se {concept} está funcionando ou sendo usado corretamente?",
+        "Que evidência seria suficiente para dizer que entendi {concept}, em vez de apenas decorar a definição?",
+        "Quais sinais indicariam que uma resposta sobre {concept} está correta e não apenas parece convincente?",
+    ],
+}
+
+ANSWER_SUFFIXES = {
+    "explain": "Em termos simples, o ponto principal é: {fact}",
+    "contrast": "A distinção deve ser feita pelo significado e pelo comportamento, não apenas pelo nome. {fact}",
+    "diagnose": "Comece comparando o comportamento observado com a definição e com a documentação da ferramenta. {fact}",
+    "decision": "A escolha depende do problema, das restrições e do custo da solução; não é uma decisão automática. {fact}",
+    "apply": "Na prática, isso aparece quando o sistema precisa lidar diretamente com essa propriedade. {fact}",
+    "verify": "Uma boa verificação combina definição, comportamento observado e evidência reproduzível. {fact}",
+}
+
+
+def read_jsonl(path: Path) -> list[dict]:
     if not path.exists():
         return []
-    out = []
+    rows = []
     for line in path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
             continue
@@ -132,58 +186,137 @@ def read_jsonl(path: Path):
         except json.JSONDecodeError:
             continue
         if isinstance(row, dict):
-            out.append(row)
-    return out
+            rows.append(row)
+    return rows
 
 
-def normalize(row):
+def normalize(row: dict) -> dict | None:
     if "messages" in row and isinstance(row["messages"], list):
-        msgs = row["messages"]
-        if len(msgs) >= 2 and msgs[-1].get("role") == "assistant":
-            return {"messages": [{"role": m.get("role"), "content": str(m.get("content", "")).strip()} for m in msgs]}
+        messages = row["messages"]
+        if len(messages) >= 2 and messages[-1].get("role") == "assistant":
+            clean = []
+            for message in messages:
+                if not isinstance(message, dict) or message.get("role") not in {"system", "user", "assistant"}:
+                    return None
+                content = str(message.get("content", "")).strip()
+                if not content:
+                    return None
+                clean.append({"role": message["role"], "content": content})
+            return {"messages": clean}
     if row.get("user") and row.get("assistant"):
-        return {"messages": [{"role": "user", "content": str(row["user"]).strip()}, {"role": "assistant", "content": str(row["assistant"]).strip()}]}
+        return {
+            "messages": [
+                {"role": "user", "content": str(row["user"]).strip()},
+                {"role": "assistant", "content": str(row["assistant"]).strip()},
+            ]
+        }
     return None
 
 
-def key(row):
-    return hashlib.sha256(json.dumps(row, ensure_ascii=False, sort_keys=True).encode()).hexdigest()
+def key(row: dict) -> str:
+    payload = json.dumps(row, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def main():
+def build_candidates() -> list[tuple[str, dict]]:
+    rng = random.Random(SEED)
+    candidates = []
+    for concept, fact in CURRICULUM:
+        for family in TASK_FAMILIES:
+            prompt = rng.choice(PROMPTS[family]).format(concept=concept)
+            answer = ANSWER_SUFFIXES[family].format(fact=fact)
+            row = {"messages": [{"role": "user", "content": prompt}, {"role": "assistant", "content": answer}]}
+            candidates.append((family, row))
+    rng.shuffle(candidates)
+    return candidates
+
+
+def select_balanced(candidates: list[tuple[str, dict]], existing: int) -> list[dict]:
+    needed = max(0, TARGET - existing)
+    if needed == 0:
+        return []
+
+    by_family = {family: [] for family in TASK_FAMILIES}
+    for family, row in candidates:
+        by_family[family].append(row)
+
+    # Primeiro garante distribuição equilibrada entre as seis tarefas.
+    selected = []
+    seen = set()
+    quota = needed // len(TASK_FAMILIES)
+    remainder = needed % len(TASK_FAMILIES)
+
+    for index, family in enumerate(TASK_FAMILIES):
+        amount = quota + (1 if index < remainder else 0)
+        for row in by_family[family]:
+            digest = key(row)
+            if digest in seen:
+                continue
+            seen.add(digest)
+            selected.append(row)
+            if sum(1 for r in selected if key(r) in {key(x) for x in by_family[family]}) >= amount:
+                break
+
+    # O cálculo acima é deliberadamente conservador; completa a cota caso
+    # alguma família tenha perdido exemplos por deduplicação.
+    if len(selected) < needed:
+        for family in TASK_FAMILIES:
+            for row in by_family[family]:
+                digest = key(row)
+                if digest in seen:
+                    continue
+                seen.add(digest)
+                selected.append(row)
+                if len(selected) == needed:
+                    return selected
+    return selected[:needed]
+
+
+def main() -> None:
     rows = []
     seen = set()
+
+    # Dados já curados têm prioridade e não são substituídos pela geração.
     for path in (BASE, MULTI):
         for raw in read_jsonl(path):
             row = normalize(raw)
-            if row and key(row) not in seen:
-                seen.add(key(row)); rows.append(row)
+            if row is None:
+                continue
+            digest = key(row)
+            if digest not in seen:
+                seen.add(digest)
+                rows.append(row)
 
-    # Quatro tipos de tarefa por conceito: entendimento, decisão, diagnóstico e aplicação.
-    for concept, answer in CURRICULUM:
-        examples = [
-            (f"Explique o conceito de {concept} e destaque sua ideia principal.", answer),
-            (f"Estou trabalhando com {concept}. Qual é um erro comum de interpretação que devo evitar?", f"Um erro comum é simplificar demais o conceito. {answer}"),
-            (f"Em um projeto real, quando {concept} seria relevante e por quê?", f"{answer} Ele é relevante quando a tarefa depende diretamente dessa propriedade ou comportamento."),
-            (f"Como eu verificaria se estou usando {concept} corretamente em uma implementação ou avaliação?", f"Verifique a definição e compare-a com o comportamento observado. {answer}"),
-        ]
-        for q, a in examples:
-            row = {"messages": [{"role": "user", "content": q}, {"role": "assistant", "content": a}]}
-            k = key(row)
-            if k not in seen:
-                seen.add(k); rows.append(row)
+    if len(rows) > TARGET:
+        raise RuntimeError(
+            f"Fontes curadas já possuem {len(rows)} exemplos; alvo configurado: {TARGET}."
+        )
 
-    if len(rows) < TARGET:
-        raise RuntimeError(f"Dataset ficou com {len(rows)} exemplos; mínimo: {TARGET}")
+    generated = select_balanced(build_candidates(), len(rows))
+    for row in generated:
+        digest = key(row)
+        if digest not in seen:
+            seen.add(digest)
+            rows.append(row)
 
-    rows = rows[:TARGET]
-    OUT.write_text("".join(json.dumps(r, ensure_ascii=False, separators=(",", ":")) + "\n" for r in rows), encoding="utf-8")
+    if len(rows) != TARGET:
+        raise RuntimeError(f"Dataset ficou com {len(rows)} exemplos; esperado exatamente {TARGET}.")
 
-    single = sum(len(r["messages"]) == 2 for r in rows)
-    multi = sum(len(r["messages"]) > 2 for r in rows)
+    OUT.write_text(
+        "".join(json.dumps(row, ensure_ascii=False, separators=(",", ":")) + "\n" for row in rows),
+        encoding="utf-8",
+    )
+
+    single = sum(len(row["messages"]) == 2 for row in rows)
+    multi = sum(len(row["messages"]) > 2 for row in rows)
+    generated_count = len(generated)
     print(f"Dataset v0.9: {len(rows)} exemplos")
+    print(f"Fontes curadas: {len(rows) - generated_count}")
+    print(f"Gerados: {generated_count}")
     print(f"Single-turn: {single}")
     print(f"Multivoltas: {multi}")
+    print(f"Famílias geradas: {', '.join(TASK_FAMILIES)}")
+    print(f"Seed: {SEED}")
     print(f"Saída: {OUT.relative_to(ROOT)}")
 
 
