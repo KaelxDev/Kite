@@ -1,18 +1,43 @@
+# Fonte única de configuração do pipeline de treinamento do Kite.
+# train.py lê este arquivo; argumentos de CLI, quando fornecidos, apenas sobrescrevem
+# valores para um experimento pontual.
+
 model_name_or_path: ./base_model/Qwen2.5-0.5B-Instruct
 dataset_path: ./datasets/processed/train.jsonl
 output_dir: ./outputs/kite-lora
 
-# Initial conservative configuration for the first LoRA experiment
-num_train_epochs: 1
-per_device_train_batch_size: 1
-gradient_accumulation_steps: 8
-learning_rate: 0.0002
-logging_steps: 1
-save_steps: 50
-max_seq_length: 1024
+training:
+  num_train_epochs: 2
+  per_device_train_batch_size: 1
+  gradient_accumulation_steps: 8
+  learning_rate: 0.0001
+  lr_scheduler_type: cosine
+  warmup_ratio: 0.05
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  logging_steps: 5
+  save_strategy: epoch
+  save_total_limit: 2
+  eval_strategy: epoch
+  load_best_model_at_end: true
 
-lora_r: 16
-lora_alpha: 32
-lora_dropout: 0.05
+  max_seq_length: 1024
+  eval_ratio: 0.10
+  seed: 42
 
-seed: 42
+  fp16: true
+  bf16: false
+  gradient_checkpointing: false
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+
+experiment:
+  no_validation: false
