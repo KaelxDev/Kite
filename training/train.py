@@ -89,12 +89,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-validation",
         action="store_true",
-        help="Não cria split de validação. Útil apenas para diagnósticos específicos.",
+        help="Não cria split de validação."
     )
     parser.add_argument(
         "--clean-output",
         action="store_true",
-        help="Remove checkpoints anteriores antes de um novo treino. Não usa com --resume.",
+        help="Remove checkpoints anteriores antes de um novo treino. Não usar com --resume.",
     )
     return parser.parse_args()
 
@@ -112,10 +112,8 @@ def validate_args(args: argparse.Namespace) -> None:
         raise ValueError("--max-length deve ser pelo menos 32 tokens.")
     if not 0 <= args.eval_ratio < 1:
         raise ValueError("--eval-ratio deve estar entre 0 e 1.")
-    if args.lora_r <= 0:
-        raise ValueError("--lora-r deve ser maior que zero.")
-    if args.lora_alpha <= 0:
-        raise ValueError("--lora-alpha deve ser maior que zero.")
+    if args.lora_r <= 0 or args.lora_alpha <= 0:
+        raise ValueError("--lora-r e --lora-alpha devem ser maiores que zero.")
     if not 0 <= args.lora_dropout < 1:
         raise ValueError("--lora-dropout deve estar entre 0 e 1.")
     if args.clean_output and args.resume:
@@ -129,7 +127,6 @@ def set_seed(seed: int) -> None:
         np.random.seed(seed)
     except ImportError:
         pass
-
     try:
         import torch
         torch.manual_seed(seed)
@@ -146,7 +143,6 @@ def check_dependencies() -> None:
             __import__(package)
         except ImportError:
             missing.append(package)
-
     if missing:
         raise RuntimeError(
             "Dependências ausentes: " + ", ".join(missing) +
@@ -158,35 +154,23 @@ def check_dependencies() -> None:
 def normalize_message(message: Any) -> dict[str, str]:
     if not isinstance(message, dict):
         raise ValueError("cada mensagem deve ser um objeto JSON")
-
     role = message.get("role")
     content = message.get("content")
-
     if role not in ALLOWED_ROLES:
         raise ValueError(f"role inválida: {role!r}")
     if not isinstance(content, str) or not content.strip():
         raise ValueError("mensagem com conteúdo vazio ou não textual")
-
     return {"role": role, "content": content.strip()}
 
 
 def validate_messages(messages: Any) -> list[dict[str, str]]:
     if not isinstance(messages, list) or len(messages) < 2:
         raise ValueError("'messages' deve conter pelo menos dois turnos")
-
     normalized = [normalize_message(message) for message in messages]
-
     if normalized[0]["role"] != "user":
         raise ValueError("a conversa deve começar com user")
     if normalized[-1]["role"] != "assistant":
         raise ValueError("a conversa deve terminar com assistant")
-    if not any(m["role"] == "user" for m in normalized):
-        raise ValueError("conversa sem user")
-    if not any(m["role"] == "assistant" for m in normalized):
-        raise ValueError("conversa sem assistant")
-
-    # Não permitimos dois turnos consecutivos do mesmo papel. Isso evita
-    # amostras malformadas e torna a máscara previsível.
     previous_role = None
     for message in normalized:
         role = message["role"]
@@ -194,7 +178,6 @@ def validate_messages(messages: Any) -> list[dict[str, str]]:
             raise ValueError(f"turnos consecutivos do mesmo papel: {role}")
         if role in {"user", "assistant"}:
             previous_role = role
-
     return normalized
 
 
@@ -205,15 +188,12 @@ def load_examples() -> list[dict[str, Any]]:
             "Execute primeiro:\n"
             "  python scripts/prepare_dataset.py"
         )
-
     examples: list[dict[str, Any]] = []
     invalid = 0
-
     with DATASET_PATH.open("r", encoding="utf-8") as file:
         for line_number, line in enumerate(file, 1):
             if not line.strip():
                 continue
-
             try:
                 item = json.loads(line)
                 if not isinstance(item, dict):
@@ -223,34 +203,28 @@ def load_examples() -> list[dict[str, Any]]:
             except (json.JSONDecodeError, ValueError) as exc:
                 invalid += 1
                 print(f"⚠ Linha {line_number} ignorada: {exc}")
-
     if not examples:
         raise ValueError("Nenhum exemplo válido foi encontrado no dataset.")
-
     print(f"✓ Exemplos válidos: {len(examples)}")
-    print(f"⚠ Exemplos inválidos: {invalid}")
+    if invalid:
+        print(f"⚠ Exemplos inválidos: {invalid}")
     return examples
 
 
 def find_checkpoint() -> str | None:
     if not OUTPUT_PATH.exists():
         return None
-
     checkpoints = []
     for path in OUTPUT_PATH.glob("checkpoint-*"):
         suffix = path.name.removeprefix("checkpoint-")
         if suffix.isdigit():
             checkpoints.append((int(suffix), path))
-
-    if not checkpoints:
-        return None
-    return str(max(checkpoints, key=lambda item: item[0])[1])
+    return str(max(checkpoints, key=lambda item: item[0])[1]) if checkpoints else None
 
 
 def maybe_clean_output(args: argparse.Namespace) -> None:
     if not args.clean_output or not OUTPUT_PATH.exists():
         return
-
     print(f"🧹 Removendo checkpoints anteriores de {OUTPUT_PATH}...")
     for checkpoint in OUTPUT_PATH.glob("checkpoint-*"):
         if checkpoint.is_dir():
@@ -266,20 +240,15 @@ def fingerprint_examples(examples: list[dict[str, Any]]) -> str:
 
 def split_examples(examples: list[dict[str, Any]], args: argparse.Namespace):
     from datasets import Dataset
-
-    rows = [{"messages": example["messages"]} for example in examples]
-    dataset = Dataset.from_list(rows)
-
+    dataset = Dataset.from_list([{"messages": x["messages"]} for x in examples])
     if args.no_validation or args.eval_ratio == 0 or len(dataset) < 10:
         print("ℹ Validação interna: desativada")
         return dataset, None
-
     split = dataset.train_test_split(
         test_size=args.eval_ratio,
         seed=args.seed,
         shuffle=True,
     )
-
     print(f"✓ Split treino: {len(split['train'])}")
     print(f"✓ Split validação: {len(split['test'])}")
     return split["train"], split["test"]
@@ -289,12 +258,11 @@ def _as_list(value: Any) -> list[int]:
     if hasattr(value, "tolist"):
         value = value.tolist()
     if isinstance(value, list) and value and isinstance(value[0], list):
-        return list(value[0])
+        value = value[0]
     return list(value)
 
 
 def native_assistant_mask(tokenizer, messages: list[dict[str, str]]) -> tuple[list[int], list[int]] | None:
-    """Usa a máscara oficial do chat template quando o template oferece suporte."""
     try:
         encoded = tokenizer.apply_chat_template(
             messages,
@@ -308,7 +276,6 @@ def native_assistant_mask(tokenizer, messages: list[dict[str, str]]) -> tuple[li
 
     if not isinstance(encoded, dict):
         return None
-
     ids = encoded.get("input_ids")
     mask = encoded.get("assistant_masks")
     if mask is None:
@@ -320,7 +287,8 @@ def native_assistant_mask(tokenizer, messages: list[dict[str, str]]) -> tuple[li
     assistant_mask = _as_list(mask)
     if len(input_ids) != len(assistant_mask):
         return None
-
+    if not any(assistant_mask):
+        return None
     return input_ids, assistant_mask
 
 
@@ -328,7 +296,6 @@ def fallback_assistant_mask(
     tokenizer,
     messages: list[dict[str, str]],
 ) -> tuple[list[int], list[int]]:
-    """Fallback para chat templates sem {% generation %}."""
     full_text = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -340,7 +307,6 @@ def fallback_assistant_mask(
     for index, message in enumerate(messages):
         if message["role"] != "assistant":
             continue
-
         before = tokenizer.apply_chat_template(
             messages[:index],
             tokenize=False,
@@ -351,93 +317,54 @@ def fallback_assistant_mask(
             tokenize=False,
             add_generation_prompt=False,
         )
-
         start = len(tokenizer(before, add_special_tokens=False)["input_ids"])
         end = len(tokenizer(through, add_special_tokens=False)["input_ids"])
         start = max(0, min(start, len(full_ids)))
         end = max(start, min(end, len(full_ids)))
         for position in range(start, end):
             mask[position] = 1
-
     return list(full_ids), mask
 
 
-def encode_messages(
-    tokenizer,
-    messages: list[dict[str, str]],
-) -> tuple[list[int], list[int], str]:
+def encode_messages(tokenizer, messages: list[dict[str, str]]):
     native = native_assistant_mask(tokenizer, messages)
     if native is not None:
-        ids, mask = native
-        return ids, mask, "native"
+        return (*native, "native")
+    fallback = fallback_assistant_mask(tokenizer, messages)
+    if not any(fallback[1]):
+        raise ValueError("nenhum token do assistant foi identificado")
+    return (*fallback, "fallback")
 
-    ids, mask = fallback_assistant_mask(tokenizer, messages)
-    return ids, mask, "fallback"
 
-
-def trim_sequence(
-    input_ids: list[int],
-    assistant_mask: list[int],
-    max_length: int,
-) -> tuple[list[int], list[int], bool]:
+def trim_sequence(input_ids: list[int], mask: list[int], max_length: int):
     if len(input_ids) <= max_length:
-        return input_ids, assistant_mask, False
-
-    # Mantemos o final da conversa, porque em exemplos multivoltas o turno mais
-    # recente costuma depender do contexto imediatamente anterior. Ajustamos a
-    # máscara junto com a janela.
+        return input_ids, mask, False
     start = len(input_ids) - max_length
-    return input_ids[start:], assistant_mask[start:], True
+    return input_ids[start:], mask[start:], True
 
 
 def build_tokenized_dataset(tokenizer, dataset, max_length: int):
     from datasets import Dataset
-
     rows = []
-    skipped = 0
-    truncated = 0
-    native_mask_count = 0
-    fallback_mask_count = 0
-    total_input_tokens = 0
-    total_assistant_tokens = 0
-    multiturn = 0
+    skipped = truncated = multiturn = native = fallback = 0
+    total_input = total_loss = 0
 
     for example in dataset:
-        messages = example["messages"]
         try:
-            input_ids, assistant_mask, mask_mode = encode_messages(tokenizer, messages)
-            if mask_mode == "native":
-                native_mask_count += 1
-            else:
-                fallback_mask_count += 1
-
-            input_ids, assistant_mask, was_truncated = trim_sequence(
-                input_ids,
-                assistant_mask,
-                max_length,
-            )
-
-            if was_truncated:
-                truncated += 1
-
-            labels = [
-                token if active else -100
-                for token, active in zip(input_ids, assistant_mask)
-            ]
-
+            input_ids, assistant_mask, mode = encode_messages(tokenizer, example["messages"])
+            input_ids, assistant_mask, was_truncated = trim_sequence(input_ids, assistant_mask, max_length)
+            truncated += int(was_truncated)
+            native += int(mode == "native")
+            fallback += int(mode == "fallback")
+            labels = [token if active else -100 for token, active in zip(input_ids, assistant_mask)]
             active = sum(label != -100 for label in labels)
             if len(input_ids) < 2 or active == 0:
                 skipped += 1
                 continue
-
-            rows.append({
-                "input_ids": input_ids,
-                "labels": labels,
-            })
-            total_input_tokens += len(input_ids)
-            total_assistant_tokens += active
-            if len(messages) > 2:
-                multiturn += 1
+            rows.append({"input_ids": input_ids, "labels": labels})
+            total_input += len(input_ids)
+            total_loss += active
+            multiturn += int(len(example["messages"]) > 2)
         except Exception as exc:
             skipped += 1
             print(f"⚠ Exemplo ignorado durante tokenização: {exc}")
@@ -448,51 +375,37 @@ def build_tokenized_dataset(tokenizer, dataset, max_length: int):
     print(f"✓ Exemplos tokenizados: {len(rows)}")
     print(f"✓ Multivoltas: {multiturn}")
     print(f"✓ Truncados: {truncated}")
-    print(f"✓ Máscara nativa do template: {native_mask_count}")
-    print(f"✓ Máscara fallback: {fallback_mask_count}")
-    print(f"✓ Tokens de entrada: {total_input_tokens}")
-    print(f"✓ Tokens com loss: {total_assistant_tokens}")
-    print(f"✓ Cobertura de loss: {total_assistant_tokens / max(total_input_tokens, 1):.2%}")
+    print(f"✓ Máscara nativa: {native}")
+    print(f"✓ Máscara fallback: {fallback}")
+    print(f"✓ Tokens de entrada: {total_input}")
+    print(f"✓ Tokens com loss: {total_loss}")
+    print(f"✓ Cobertura de loss: {total_loss / max(total_input, 1):.2%}")
     if skipped:
-        print(f"⚠ Ignorados após tokenização: {skipped}")
-
+        print(f"⚠ Ignorados: {skipped}")
     return Dataset.from_list(rows)
 
 
 def dataset_stats(dataset) -> dict[str, Any]:
     lengths = [len(row["input_ids"]) for row in dataset]
-    assistant_tokens = [
-        sum(label != -100 for label in row["labels"])
-        for row in dataset
-    ]
-
+    assistant_tokens = [sum(label != -100 for label in row["labels"]) for row in dataset]
     return {
         "examples": len(dataset),
         "input_tokens": sum(lengths),
         "assistant_tokens": sum(assistant_tokens),
         "loss_coverage": round(sum(assistant_tokens) / max(sum(lengths), 1), 6),
         "mean_input_tokens": round(sum(lengths) / max(len(lengths), 1), 2),
-        "mean_assistant_tokens": round(
-            sum(assistant_tokens) / max(len(assistant_tokens), 1),
-            2,
-        ),
+        "mean_assistant_tokens": round(sum(assistant_tokens) / max(len(assistant_tokens), 1), 2),
         "max_input_tokens": max(lengths, default=0),
         "min_input_tokens": min(lengths, default=0),
     }
 
 
-def save_run_manifest(
-    args: argparse.Namespace,
-    raw_fingerprint: str,
-    train_stats: dict[str, Any],
-    eval_stats: dict[str, Any] | None,
-    mask_mode: str,
-) -> None:
+def save_run_manifest(args, fingerprint, train_stats, eval_stats, mask_mode):
     OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
     manifest = {
         "model": str(MODEL_PATH),
         "dataset": str(DATASET_PATH),
-        "dataset_sha256": raw_fingerprint,
+        "dataset_sha256": fingerprint,
         "training": {
             "epochs": args.epochs,
             "batch_size": args.batch_size,
@@ -500,7 +413,7 @@ def save_run_manifest(
             "learning_rate": args.lr,
             "max_length": args.max_length,
             "seed": args.seed,
-            "eval_ratio": args.eval_ratio if not args.no_validation else 0,
+            "eval_ratio": 0 if args.no_validation else args.eval_ratio,
             "mask_mode": mask_mode,
             "lora_r": args.lora_r,
             "lora_alpha": args.lora_alpha,
@@ -516,6 +429,7 @@ def save_run_manifest(
 
 
 def make_training_args(TrainingArguments, args, torch):
+    signature = inspect.signature(TrainingArguments.__init__).parameters
     params = {
         "output_dir": str(OUTPUT_PATH),
         "num_train_epochs": args.epochs,
@@ -544,21 +458,22 @@ def make_training_args(TrainingArguments, args, torch):
         "label_names": ["labels"],
     }
 
-    if args.gradient_checkpointing:
-        params["gradient_checkpointing"] = True
-
-    signature = inspect.signature(TrainingArguments.__init__).parameters
+    has_eval_strategy = False
     if "eval_strategy" in signature:
-        params["eval_strategy"] = "epoch"
+        params["eval_strategy"] = "epoch" if not args.no_validation else "no"
+        has_eval_strategy = True
     elif "evaluation_strategy" in signature:
-        params["evaluation_strategy"] = "epoch"
+        params["evaluation_strategy"] = "epoch" if not args.no_validation else "no"
+        has_eval_strategy = True
 
-    if "load_best_model_at_end" in signature:
+    if has_eval_strategy and not args.no_validation and "load_best_model_at_end" in signature:
         params["load_best_model_at_end"] = True
         params["metric_for_best_model"] = "eval_loss"
         params["greater_is_better"] = False
 
-    # Mantém compatibilidade com versões que ainda não possuem algumas opções.
+    if args.gradient_checkpointing and "gradient_checkpointing" in signature:
+        params["gradient_checkpointing"] = True
+
     supported = {key: value for key, value in params.items() if key in signature}
     return TrainingArguments(**supported)
 
@@ -568,9 +483,11 @@ def make_trainer(Trainer, tokenizer, model, training_args, train_dataset, eval_d
         "model": model,
         "args": training_args,
         "train_dataset": train_dataset,
-        "eval_dataset": eval_dataset,
         "data_collator": collator,
     }
+    if eval_dataset is not None:
+        kwargs["eval_dataset"] = eval_dataset
+
     signature = inspect.signature(Trainer.__init__).parameters
     if "processing_class" in signature:
         kwargs["processing_class"] = tokenizer
@@ -579,7 +496,7 @@ def make_trainer(Trainer, tokenizer, model, training_args, train_dataset, eval_d
     return Trainer(**kwargs)
 
 
-def print_banner(args: argparse.Namespace) -> None:
+def print_banner(args):
     print("\n╔══════════════════════════════════════════╗")
     print("║             🪁 KITE TRAINING             ║")
     print("║       Qwen2.5-0.5B + LoRA / SFT         ║")
@@ -591,21 +508,12 @@ def print_banner(args: argparse.Namespace) -> None:
     print(f"Batch:   {args.batch_size} x {args.gradient_accumulation}")
     print(f"LR:      {args.lr}")
     print(f"Contexto máximo: {args.max_length} tokens")
-    print(f"Validação: {0 if args.no_validation else args.eval_ratio:.0%}")
-    print(
-        f"LoRA:    r={args.lora_r}, alpha={args.lora_alpha}, "
-        f"dropout={args.lora_dropout}"
-    )
+    print(f"Validação: {'desativada' if args.no_validation else f'{args.eval_ratio:.0%}'}")
+    print(f"LoRA:    r={args.lora_r}, alpha={args.lora_alpha}, dropout={args.lora_dropout}")
     print("Loss:    somente tokens do assistant\n")
 
 
-def dry_run(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
-    from transformers import AutoTokenizer
-
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-    tokenizer.padding_side = "right"
-
-    raw_fingerprint = fingerprint_examples(examples)
+def prepare_datasets(tokenizer, examples, args):
     train_raw, eval_raw = split_examples(examples, args)
     train_dataset = build_tokenized_dataset(tokenizer, train_raw, args.max_length)
     eval_dataset = (
@@ -613,24 +521,28 @@ def dry_run(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
         if eval_raw is not None
         else None
     )
+    return train_dataset, eval_dataset
 
+
+def dry_run(args, examples):
+    from transformers import AutoTokenizer
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
+    tokenizer.padding_side = "right"
+    train_dataset, eval_dataset = prepare_datasets(tokenizer, examples, args)
     train_stats = dataset_stats(train_dataset)
     eval_stats = dataset_stats(eval_dataset) if eval_dataset is not None else None
-
     print("\n✓ DRY-RUN concluído")
     print(f"  Treino: {train_stats['examples']} exemplos")
     if eval_stats:
         print(f"  Validação: {eval_stats['examples']} exemplos")
-    print(f"  Loss coverage (treino): {train_stats['loss_coverage']:.2%}")
+    print(f"  Cobertura de loss: {train_stats['loss_coverage']:.2%}")
     print(f"  Média de tokens de entrada: {train_stats['mean_input_tokens']}")
     print(f"  Média de tokens com loss: {train_stats['mean_assistant_tokens']}")
-    print(f"  Fingerprint do dataset: {raw_fingerprint[:16]}...")
     print("  Nenhum peso foi alterado.")
 
 
-def train(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
+def train(args, examples):
     import torch
-    from datasets import Dataset
     from peft import LoraConfig, TaskType, get_peft_model
     from transformers import (
         AutoModelForCausalLM,
@@ -641,7 +553,6 @@ def train(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
     )
 
     maybe_clean_output(args)
-
     if not args.yes:
         answer = input("\n⚠ Iniciar treinamento agora? [s/N]: ").strip().lower()
         if answer not in {"s", "sim", "y", "yes"}:
@@ -649,33 +560,20 @@ def train(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
             return
 
     OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
-
     tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
     tokenizer.padding_side = "right"
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
     dtype = torch.float16 if torch.cuda.is_available() else torch.float32
-    device_name = "CUDA" if torch.cuda.is_available() else "CPU"
-    print(f"\nDispositivo: {device_name}")
+    print(f"\nDispositivo: {'CUDA' if torch.cuda.is_available() else 'CPU'}")
     print(f"Dtype: {dtype}")
 
-    train_raw, eval_raw = split_examples(examples, args)
-    print("\n🔤 Tokenizando treino...")
-    train_dataset = build_tokenized_dataset(tokenizer, train_raw, args.max_length)
-    eval_dataset = None
-    if eval_raw is not None:
-        print("\n🔤 Tokenizando validação...")
-        eval_dataset = build_tokenized_dataset(tokenizer, eval_raw, args.max_length)
-
+    train_dataset, eval_dataset = prepare_datasets(tokenizer, examples, args)
     train_stats = dataset_stats(train_dataset)
     eval_stats = dataset_stats(eval_dataset) if eval_dataset is not None else None
     raw_fingerprint = fingerprint_examples(examples)
-
-    # Usa a máscara nativa quando disponível. Se o template não suportar a
-    # funcionalidade, o builder registra a quantidade de fallbacks no log.
-    mask_mode = "native_or_fallback"
-    save_run_manifest(args, raw_fingerprint, train_stats, eval_stats, mask_mode)
+    save_run_manifest(args, raw_fingerprint, train_stats, eval_stats, "native_or_fallback")
 
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_PATH,
@@ -708,7 +606,6 @@ def train(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
     )
 
     training_args = make_training_args(TrainingArguments, args, torch)
-
     trainer = make_trainer(
         Trainer,
         tokenizer,
@@ -724,31 +621,29 @@ def train(args: argparse.Namespace, examples: list[dict[str, Any]]) -> None:
         if resume_checkpoint:
             print(f"\n↩ Retomando de: {resume_checkpoint}")
         else:
-            print("\n⚠ --resume foi informado, mas nenhum checkpoint foi encontrado.")
-            print("  Um treinamento novo será iniciado.")
+            print("\n⚠ --resume informado, mas nenhum checkpoint encontrado; iniciando novo treino.")
 
-    print("\n📊 Resumo do sinal de treinamento")
-    print(f"  Exemplos de treino: {train_stats['examples']}")
-    print(f"  Tokens de entrada: {train_stats['input_tokens']}")
-    print(f"  Tokens do assistant com loss: {train_stats['assistant_tokens']}")
+    print("\n📊 Sinal de treinamento")
+    print(f"  Exemplos treino: {train_stats['examples']}")
+    print(f"  Tokens entrada: {train_stats['input_tokens']}")
+    print(f"  Tokens com loss: {train_stats['assistant_tokens']}")
     print(f"  Cobertura de loss: {train_stats['loss_coverage']:.2%}")
     if eval_stats:
-        print(f"  Exemplos de validação: {eval_stats['examples']}")
+        print(f"  Exemplos validação: {eval_stats['examples']}")
 
     print("\n🚀 Iniciando treinamento...\n")
     trainer.train(resume_from_checkpoint=resume_checkpoint)
 
-    print("\n💾 Salvando melhor estado do adapter...")
+    print("\n💾 Salvando adapter LoRA...")
     trainer.save_model(str(OUTPUT_PATH))
     tokenizer.save_pretrained(str(OUTPUT_PATH))
-
     model.config.use_cache = True
     model.save_pretrained(str(OUTPUT_PATH))
 
     print("\n✓ Treinamento concluído.")
     print(f"✓ Adapter salvo em: {OUTPUT_PATH}")
     print("✓ Modelo-base não foi sobrescrito.")
-    print("✓ training_manifest.json salvo para reprodutibilidade.")
+    print("✓ training_manifest.json salvo.")
     print("ℹ Para produzir um modelo standalone, use scripts/merge_lora.py.")
 
 
@@ -766,11 +661,9 @@ def main() -> None:
         )
 
     examples = load_examples()
-
     if args.dry_run:
         dry_run(args, examples)
         return
-
     train(args, examples)
 
 
