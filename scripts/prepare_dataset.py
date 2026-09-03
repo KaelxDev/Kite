@@ -1,10 +1,11 @@
 """Prepara o dataset híbrido do Kite para treinamento.
 
 Prioridade das fontes:
-1. behavioral_core_v1.0: exemplos comportamentais de alta prioridade;
+1. behavior_core_v1.0: exemplos comportamentais de alta prioridade;
 2. v0.9-hybrid: currículo técnico gerado com controle de diversidade;
 3. v0.6-curated + multiturn_v0.1: fallback e preservação do material revisado.
 
+O behavior core recebe peso estatístico explícito por oversampling controlado.
 A saída contém somente `messages`, sem metadados de geração.
 """
 from __future__ import annotations
@@ -25,6 +26,10 @@ INPUT_FILES = [
 ]
 OUTPUT_FILE = PROCESSED / "train.jsonl"
 ALLOWED_ROLES = {"system", "user", "assistant"}
+
+# Peso real do núcleo comportamental no treinamento.
+# 3 significa: cada exemplo único do core aparece 3 vezes no train.jsonl.
+CORE_REPEAT = 3
 
 
 def normalize_text(value: object) -> str:
@@ -104,7 +109,7 @@ def near_duplicate(a: dict, b: dict, threshold: float = 0.92) -> bool:
 
 
 def main() -> None:
-    print("🪁 Kite — preparação do dataset híbrido v1.0\n")
+    print("🪁 Kite — preparação do dataset híbrido v1.1\n")
 
     existing = [path for path in INPUT_FILES if path.exists()]
     if not existing:
@@ -112,6 +117,7 @@ def main() -> None:
 
     PROCESSED.mkdir(parents=True, exist_ok=True)
     valid: list[dict] = []
+    core_examples: list[dict] = []
     seen: set[str] = set()
     question_index: list[dict] = []
     invalid = 0
@@ -147,20 +153,37 @@ def main() -> None:
                 seen.add(key)
                 valid.append(example)
                 question_index.append(example)
+                if is_core:
+                    core_examples.append(example)
 
     if not valid:
         raise ValueError("Nenhum exemplo válido encontrado.")
 
+    # Oversampling explícito: os mesmos exemplos corretos do behavior core
+    # aparecem várias vezes no conjunto de treino, aumentando sua contribuição
+    # esperada para a loss sem fabricar novas respostas.
+    weighted = list(valid)
+    for _ in range(CORE_REPEAT - 1):
+        weighted.extend(core_examples)
+
     with OUTPUT_FILE.open("w", encoding="utf-8", newline="\n") as target:
-        for example in valid:
+        for example in weighted:
             target.write(json.dumps(example, ensure_ascii=False) + "\n")
 
-    multiturn = sum(len(item["messages"]) > 2 for item in valid)
-    single = sum(len(item["messages"]) == 2 for item in valid)
-    system = sum(any(m["role"] == "system" for m in item["messages"]) for item in valid)
+    multiturn = sum(len(item["messages"]) > 2 for item in weighted)
+    single = sum(len(item["messages"]) == 2 for item in weighted)
+    system = sum(any(m["role"] == "system" for m in item["messages"]) for item in weighted)
+    core_unique = len(core_examples)
+    core_weighted = core_unique * CORE_REPEAT
+    core_share = core_weighted / len(weighted) if weighted else 0.0
 
     print("\n✓ Dataset preparado")
-    print(f"✓ Exemplos totais: {len(valid)}")
+    print(f"✓ Exemplos únicos: {len(valid)}")
+    print(f"✓ Exemplos para treino: {len(weighted)}")
+    print(f"✓ Behavior core único: {core_unique}")
+    print(f"✓ Behavior core ponderado: {core_weighted}")
+    print(f"✓ Peso efetivo do core: {core_share:.1%}")
+    print(f"✓ Fator de oversampling: {CORE_REPEAT}x")
     print(f"✓ Single-turn: {single}")
     print(f"✓ Multivoltas: {multiturn}")
     print(f"✓ Com system: {system}")
