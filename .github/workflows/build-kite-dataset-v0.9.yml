@@ -5,6 +5,8 @@ on:
   push:
     paths:
       - "scripts/generate_kite_dataset_v0.9.py"
+      - "scripts/prepare_dataset.py"
+      - "datasets/raw/kite_behavior_core_v1.0.jsonl"
       - "datasets/raw/kite_conversations_v0.6-curated.jsonl"
       - "datasets/raw/kite_conversations_multiturn_v0.1.jsonl"
       - ".github/workflows/build-kite-dataset-v0.9.yml"
@@ -27,29 +29,40 @@ jobs:
       - name: Generate hybrid v0.9
         run: python scripts/generate_kite_dataset_v0.9.py
 
-      - name: Validate JSONL and hybrid structure
+      - name: Prepare training dataset
+        run: python scripts/prepare_dataset.py
+
+      - name: Validate raw and processed JSONL
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          path = Path("datasets/raw/kite_conversations_v0.9-hybrid.jsonl")
-          rows = [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines() if x.strip()]
-          assert len(rows) >= 500, f"Apenas {len(rows)} exemplos"
-          assert all(isinstance(r.get("messages"), list) for r in rows)
-          assert all(r["messages"][-1]["role"] == "assistant" for r in rows)
-          multi = sum(len(r["messages"]) > 2 for r in rows)
+
+          raw = Path("datasets/raw/kite_conversations_v0.9-hybrid.jsonl")
+          train = Path("datasets/processed/train.jsonl")
+
+          raw_rows = [json.loads(x) for x in raw.read_text(encoding="utf-8").splitlines() if x.strip()]
+          train_rows = [json.loads(x) for x in train.read_text(encoding="utf-8").splitlines() if x.strip()]
+
+          assert len(raw_rows) >= 500, f"Apenas {len(raw_rows)} exemplos no raw"
+          assert len(train_rows) >= 300, f"Apenas {len(train_rows)} exemplos após limpeza"
+          assert all(isinstance(r.get("messages"), list) for r in train_rows)
+          assert all(r["messages"][-1]["role"] == "assistant" for r in train_rows)
+          assert all(set(m["role"] for m in r["messages"]) <= {"system", "user", "assistant"} for r in train_rows)
+          multi = sum(len(r["messages"]) > 2 for r in train_rows)
           assert multi >= 20, f"Poucas conversas multivoltas: {multi}"
-          print(f"OK: {len(rows)} exemplos; {multi} multivoltas")
+
+          print(f"OK: raw={len(raw_rows)} | train={len(train_rows)} | multiturn={multi}")
           PY
 
-      - name: Commit dataset
+      - name: Commit datasets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add datasets/raw/kite_conversations_v0.9-hybrid.jsonl
+          git add datasets/raw/kite_conversations_v0.9-hybrid.jsonl datasets/processed/train.jsonl
           if git diff --cached --quiet; then
-            echo "Nenhuma alteração no dataset."
+            echo "Nenhuma alteração nos datasets."
             exit 0
           fi
-          git commit -m "build(dataset): generate Kite v0.9 hybrid 500+ [skip ci]"
+          git commit -m "build(dataset): refresh Kite v0.9 hybrid training set [skip ci]"
           git push
